@@ -1,5 +1,5 @@
 import { Form } from "@heroui/form";
-import { addToast, Input} from "@heroui/react";
+import { addToast, Input } from "@heroui/react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CaracteristicaCreate, CaracteristicaCreateSchema } from "@/schemas/Caracteristica";
@@ -48,14 +48,6 @@ export default function FormularioCaracteristicas({ addData, onClose, id }: Form
         {...register("nombre")}
         isInvalid={!!errors.nombre}
         errorMessage={errors.nombre?.message}
-      />
-      <Input
-        label="Simbolo"
-        placeholder="Simbolo"
-        type="text"
-        {...register("simbolo")}
-        isInvalid={!!errors.simbolo}
-        errorMessage={errors.simbolo?.message}
       />
     </Form>
   );

@@ -37,6 +37,7 @@ interface TableProps<T extends { key: string; estado?: boolean }> {
   onDelete?: (item: T) => void | undefined | Promise<void>;
   showEstado?: boolean;
   showActions?: boolean;
+  useDeleteInsteadOfChangeState?: boolean; // Nueva prop para eliminar realmente
   searchValue?: (item: T) => string;
   extraHeaderContent?: React.ReactNode;
 }
@@ -48,6 +49,7 @@ const Globaltable = <T extends { key: string; estado?: boolean }>({
   onDelete,
   showEstado = true,
   showActions = true,
+  useDeleteInsteadOfChangeState = false, // Default: cambiar estado
   extraHeaderContent,
 }: TableProps<T>) => {
   const [page, setPage] = useState(1);
@@ -311,10 +313,16 @@ const Globaltable = <T extends { key: string; estado?: boolean }>({
                             )}
                             {onDelete && (
                               <button onClick={() => onDelete?.(item)}>
-                                {item.estado ? (
+                                {useDeleteInsteadOfChangeState ? (
+                                  // Modo eliminar real: siempre muestra trash
                                   <TrashIcon className="h-5 w-5 text-red-500" />
                                 ) : (
-                                  <CheckIcon className="h-5 w-5 text-green-500" />
+                                  // Modo cambiar estado: muestra trash si está activo, check si está inactivo
+                                  item.estado ? (
+                                    <TrashIcon className="h-5 w-5 text-red-500" />
+                                  ) : (
+                                    <CheckIcon className="h-5 w-5 text-green-500" />
+                                  )
                                 )}
                               </button>
                             )}

@@ -59,14 +59,6 @@ export default function FormCategorias({
         isInvalid={!!errors.nombre}
         errorMessage={errors.nombre?.message}
       />
-      <Input
-        label="Codigo"
-        type="text"
-        placeholder="Ingrese el codigo UNPSC"
-        {...register("codigoUNPSC")}
-        isInvalid={!!errors.codigoUNPSC}
-        errorMessage={errors.codigoUNPSC?.message}
-      />
       <Controller
         control={control}
         name="estado"

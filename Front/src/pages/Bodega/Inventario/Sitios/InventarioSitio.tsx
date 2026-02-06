@@ -17,9 +17,9 @@ export const InventarioSitio = () => {
   if (!sitio) return <p>Sitio no encontrado</p>;
   return (
     <div>
-      <Link to={`/bodega/inventario/areas/${sitio.fkArea?.idArea}`}>
+      <Link to={`/bodega/inventario/`}>
         <h2 className="text-lg m-4 font-semibold">
-          <Buton text="Regresar " className=" hover hover:text-white dark:hover:text-white"/>
+          <Buton text="Regresar " className=" hover hover:text-white dark:hover:text-white" />
         </h2>
       </Link>
       <h1 className="text-2xl font-bold text-center mb-4">

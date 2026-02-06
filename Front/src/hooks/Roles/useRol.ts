@@ -1,4 +1,5 @@
 import { deleteRol } from "@/axios/Roles/deleteRol";
+import { deleteRolReal } from "@/axios/Roles/deleteRolReal";
 import { getRol } from "@/axios/Roles/getRol";
 import { postRol } from "@/axios/Roles/postRol";
 import { putRol } from "@/axios/Roles/putRol";
@@ -70,6 +71,27 @@ export function useRol() {
     },
   });
 
+  // Mutación para eliminar rol (usando delete real)
+  const removeRolMutation = useMutation({
+    mutationFn: deleteRolReal,
+
+    onSuccess: () => {
+      addToast({
+        title: "Rol eliminado correctamente",
+        color: "success",
+        timeout: 3000,
+        shouldShowTimeoutProgress: true,
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["roles"],
+      });
+    },
+
+    onError: (error) => {
+      console.error("Error al eliminar:", error);
+    },
+  });
+
   const addRol = async (rol: Rol) => {
     return addRolMutation.mutateAsync(rol);
   };
@@ -82,6 +104,10 @@ export function useRol() {
     return changeStateMutation.mutateAsync(idRol);
   };
 
+  const removeRol = async (idRol: number) => {
+    return removeRolMutation.mutateAsync(idRol);
+  };
+
   return {
     roles: data,
     isLoading,
@@ -89,6 +115,7 @@ export function useRol() {
     error,
     addRol,
     changeState,
+    removeRol,
     getRolById,
     updateRol,
   };

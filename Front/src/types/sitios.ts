@@ -1,26 +1,11 @@
 export type Sitios = {
     idSitio?: number;
     nombre: string;
-    personaEncargada?: string;
-    ubicacion?: string;
-    estado?: boolean;
-    createdAt?:string;
-    updatedAt?:string;
-    fkTipoSitio?: number;
-    fkArea?: number;
+    estante?: string;
+    pasillo?: string;
+    estado?: boolean; // Note: Entity doesn't show 'estado', but many components use it. I'll check if it's needed or if it was removed.
+    createdAt?: string;
+    updatedAt?: string;
 }
 
-export type ListarSitios = {
-    idSitio?: number;
-    nombre: string;
-    personaEncargada?: string;
-    ubicacion?: string;
-    estado?: boolean;
-    createdAt?:string;
-    updatedAt?:string;
-    fkTipoSitio?: number;
-    fkArea?: {
-        idArea:number
-        nombre:string
-    };
-}
+export type ListarSitios = Sitios;

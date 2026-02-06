@@ -6,11 +6,14 @@ export interface ElementoPostData {
   perecedero?: boolean;
   noPerecedero?: boolean;
   estado?: boolean;
-  fechaVencimiento?: string;
+  fechaVencimiento?: string | null;
   imagen?: string | File;
-  fkUnidadMedida?: number;
-  fkCategoria?: number;
+  fkUnidadMedida: number;
+  fkCategoria: number;
   fkCaracteristica?: number | null;
+  fkSitio: number;
+  fkInventario: number;
+  stock?: number;
 }
 
 export async function postElemento(data: ElementoPostData): Promise<any> {
@@ -31,6 +34,15 @@ export async function postElemento(data: ElementoPostData): Promise<any> {
   }
   if (data.fkCaracteristica) {
     formData.append("fkCaracteristica", data.fkCaracteristica.toString());
+  }
+  if (data.fkSitio) {
+    formData.append("fkSitio", data.fkSitio.toString());
+  }
+  if (data.fkInventario) {
+    formData.append("fkInventario", data.fkInventario.toString());
+  }
+  if (data.stock !== undefined) {
+    formData.append("stock", data.stock.toString());
   }
   if (data.imagen) {
     formData.append("imagen", data.imagen);

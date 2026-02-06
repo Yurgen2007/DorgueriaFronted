@@ -12,17 +12,16 @@ type propsBut = {
     variant? : "solid" | "bordered" | "light" | "flat" | "faded" | "shadow" | "ghost" | undefined
     onPress?: () => void
     disabled?: boolean
+    startContent?: React.ReactNode
 }
 
 
-export default function Buton({text,children,type="button",className="",color,variant="solid",onPress, isLoading, form, disabled}:propsBut){
+export default function Buton({text,children,type="button",className="",color,variant="solid",onPress, isLoading, form, disabled, startContent}:propsBut){
       const baseClasses = "text-white bg-blue-700"; 
     return(
-        <Button form={form} isLoading={isLoading} onPress={onPress} className={`${baseClasses} ${className}`} type={type} color={color} variant={variant} disabled={disabled}>
+        <Button form={form} isLoading={isLoading} onPress={onPress} className={`${baseClasses} ${className}`} type={type} color={color} variant={variant} disabled={disabled} startContent={startContent}>
             {text} {children}
         </Button>
     )
 }
-
-
 

@@ -26,11 +26,10 @@ const FormUpCentro = ({ categoriaId, id, onclose }: Props) => {
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(CategoriaUpdateSchema),
-    mode:"onChange",
+    mode: "onChange",
     defaultValues: {
       idCategoria: foundCategoria.idCategoria,
       nombre: foundCategoria.nombre,
-      codigoUNPSC: foundCategoria.codigoUNPSC,
     },
   });
 
@@ -63,14 +62,6 @@ const FormUpCentro = ({ categoriaId, id, onclose }: Props) => {
         type="text"
         isInvalid={!!errors.nombre}
         errorMessage={errors.nombre?.message}
-      />
-
-      <Input
-        {...register("codigoUNPSC")}
-        label="Codigo UNPSC"
-        type="text"
-        isInvalid={!!errors.codigoUNPSC}
-        errorMessage={errors.codigoUNPSC?.message}
       />
 
       <Buton

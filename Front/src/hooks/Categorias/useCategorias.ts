@@ -4,6 +4,7 @@ import { getCategorias } from "@/axios/Categorias/getCategorias";
 import { postCategorias } from "@/axios/Categorias/postCategorias";
 import { UpdCategoria } from "@/axios/Categorias/putCategorias";
 import { StateCategoria } from "@/axios/Categorias/putStateCategorias";
+import { deleteCategoriaReal } from "@/axios/Categorias/deleteCategoriaReal";
 import { addToast } from "@heroui/react";
 
 export function useCategoria() {
@@ -71,6 +72,27 @@ export function useCategoria() {
     },
   });
 
+  // Mutación para eliminar categoría (usando delete real)
+  const removeCategoriaMutation = useMutation({
+    mutationFn: deleteCategoriaReal,
+
+    onSuccess: () => {
+      addToast({
+        title: "Categoría eliminada correctamente",
+        color: "success",
+        timeout: 3000,
+        shouldShowTimeoutProgress: true,
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["categorias"],
+      });
+    },
+
+    onError: (error) => {
+      console.error("Error al eliminar:", error);
+    },
+  });
+
   const addCategoria = async (categoria: Categoria) => {
     return addCategoriaMutation.mutateAsync(categoria);
   };
@@ -83,6 +105,10 @@ export function useCategoria() {
     return changeStateMutation.mutateAsync(idCategoria);
   };
 
+  const removeCategoria = async (idCategoria: number) => {
+    return removeCategoriaMutation.mutateAsync(idCategoria);
+  };
+
   return {
     categorias: data,
     isLoading,
@@ -90,6 +116,7 @@ export function useCategoria() {
     error,
     addCategoria,
     changeState,
+    removeCategoria,
     getCategoriaById,
     updateCategoria,
   };

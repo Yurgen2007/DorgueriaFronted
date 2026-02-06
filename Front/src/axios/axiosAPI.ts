@@ -18,3 +18,6 @@ axiosAPI.interceptors.request.use((config) => {
         return Promise.reject(error);
     }
 )
+
+export const axiosInstance = axiosAPI;
+export default axiosAPI;

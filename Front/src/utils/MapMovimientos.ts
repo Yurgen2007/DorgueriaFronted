@@ -7,15 +7,13 @@ export function mapMovimiento(data: MovimientoCreate): MovimientoPostData {
     cantidad: data.cantidad ?? 0,
     horaIngreso: data.horaIngreso ?? "",
     horaSalida: data.horaSalida ?? "",
-    aceptado: data.aceptado ?? false,
-    enProceso: data.enProceso ?? true,
-    cancelado: data.cancelado ?? false,
     devolutivo: data.tipo_bien === "devolutivo",
     noDevolutivo: data.tipo_bien === "no_devolutivo",
     fkUsuario: data.fkUsuario,
     fkTipoMovimiento: data.fkTipoMovimiento,
     fkSitio: data.fkSitio,
-    fkInventario: data.fkInventario,
+    fkInventario: data.fkInventario ?? undefined,
+    fkElemento: data.fkElemento ?? undefined,
     fechaDevolucion: data.fechaDevolucion
       ? new Date(data.fechaDevolucion)
       : undefined,

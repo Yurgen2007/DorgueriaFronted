@@ -13,26 +13,26 @@ export type User = {
     fkRol?: number;
 }
 
-export type Perfil={
-    documento:number,
-    edad:number,
-    nombre : string,
-    apellido:string,
-    telefono : string,
-    correo : string,
+export type Perfil = {
+    documento: number,
+    edad: number,
+    nombre: string,
+    apellido: string,
+    telefono: string,
+    correo: string,
     perfil: string,
     fkRol: {
         nombre: string
     }
 
 }
-export type UpPerfil={
-    nombre:string,
-    apellido:string,
-    edad:number,
-    telefono:string,
-    correo:string,
-    password:string
+export type UpPerfil = {
+    nombre: string,
+    apellido: string,
+    edad: number,
+    telefono: string,
+    correo: string,
+    password: string
 }
 
 export type postUser = {
@@ -58,22 +58,20 @@ export type putUser = {
 }
 
 export type LoginCrede = {
-    documento : string,
-    password : string
+    documento: string,
+    password: string
 }
 
 export type LoginRes = {
-    access_token : string,
-    documento : number,
-    password : string,
-    modules : any[]
+    access_token: string,
+    modules: any[]
 }
 
 export type resetPassword = {
-    password:string
-    confirmPassword:string
+    password: string
+    confirmPassword: string
 }
 
 export type forgotPassword = {
-    correo : string
+    correo: string
 }

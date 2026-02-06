@@ -7,6 +7,8 @@ export interface ElementoPutData {
   fkUnidadMedida?: number;
   fkCategoria?: number;
   fkCaracteristica?: number | null;
+  fkSitio?: number;
+  fkInventario?: number | null;
 }
 
 export async function putElemento(
@@ -27,6 +29,12 @@ export async function putElemento(
   }
   if (data.fkCaracteristica) {
     formData.append("fkCaracteristica", data.fkCaracteristica.toString());
+  }
+  if (data.fkSitio) {
+    formData.append("fkSitio", data.fkSitio.toString());
+  }
+  if (data.fkInventario) {
+    formData.append("fkInventario", data.fkInventario.toString());
   }
   const res = await axiosAPI.patch(`elementos/${id}`, formData, {
     headers: {

@@ -1,20 +1,20 @@
-import  { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 import { jwtDecode } from "jwt-decode";
 import { getRefetchPermisos } from "@/axios/Usuarios/getRefetchPermisos";
 
 type Auth = {
-    authenticated : boolean | undefined,
-    setAuthenticated : React.Dispatch<React.SetStateAction<boolean | undefined>>,
-    nombre : string | undefined,
-    setNombre : React.Dispatch<React.SetStateAction<string | undefined>>
-    perfil : string | undefined,
-    setPerfil : React.Dispatch<React.SetStateAction<string | undefined>>
-    idUsuario : number | undefined,
-    setIdUser : React.Dispatch<React.SetStateAction<number | undefined>>,
-    permissions : any[],
+  authenticated: boolean | undefined,
+  setAuthenticated: React.Dispatch<React.SetStateAction<boolean | undefined>>,
+  nombre: string | undefined,
+  setNombre: React.Dispatch<React.SetStateAction<string | undefined>>
+  perfil: string | undefined,
+  setPerfil: React.Dispatch<React.SetStateAction<string | undefined>>
+  idUsuario: number | undefined,
+  setIdUser: React.Dispatch<React.SetStateAction<number | undefined>>,
+  permissions: any[],
 
-    setPermissions : React.Dispatch<React.SetStateAction<any[]>>
+  setPermissions: React.Dispatch<React.SetStateAction<any[]>>
 }
 
 const AuthContext = createContext<Auth | null>(null);
@@ -41,18 +41,10 @@ export default function AuthProvider({
     const permissions = cookies.get("permissions");
     if (token) {
       const {
-        nombre,
-        apellido,
-        perfil,
-        idUsuario,
+        idUsuario
       }: {
-        nombre: string;
-        apellido: string;
-        perfil: string;
         idUsuario: number;
       } = jwtDecode(token);
-      setNombre(`${nombre} ${apellido}`);
-      setPerfil(perfil);
       setIdUser(idUsuario);
       setAuthenticated(true);
     }
@@ -60,9 +52,9 @@ export default function AuthProvider({
       setPermissions(permissions);
     }
     const reloadPermisos = async () => {
-      const token = cookies.get("token"); 
+      const token = cookies.get("token");
 
-      if (!token) return; 
+      if (!token) return;
 
       try {
         const data = await getRefetchPermisos();

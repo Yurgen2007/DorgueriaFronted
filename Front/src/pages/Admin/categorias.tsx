@@ -1,4 +1,4 @@
-import Globaltable from "@/components/organismos/table.tsx"; 
+import Globaltable from "@/components/organismos/table.tsx";
 import { TableColumn } from "@/components/organismos/table.tsx";
 import Buton from "@/components/molecules/Button";
 import Modall from "@/components/organismos/modal";
@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { Card, CardBody } from "@heroui/react";
 
 const CategoriasTable = () => {
-  const { categorias, isLoading, isError, error, addCategoria, changeState } =
+  const { categorias, isLoading, isError, error, addCategoria, removeCategoria } =
     useCategoria();
 
   //Modal agregar
@@ -35,14 +35,16 @@ const CategoriasTable = () => {
     setSelectedCategoria(null);
   };
 
-  const handleState = async (categorias: Categoria) => {
-    await changeState(categorias.idCategoria as number);
+  const handleState = async (categoria: Categoria) => {
+    if (categoria.idCategoria) {
+      await removeCategoria(categoria.idCategoria);
+    }
   };
 
   const handleAddCategoria = async (categoria: Categoria) => {
     try {
       await addCategoria(categoria);
-      handleClose(); 
+      handleClose();
     } catch (error) {
       console.error("Error al agregar la categoria:", error);
     }
@@ -56,7 +58,6 @@ const CategoriasTable = () => {
   // Definir las columnas de la tabla
   const columns: TableColumn<Categoria>[] = [
     { key: "nombre", label: "Nombre" },
-    { key: "codigoUNPSC", label: "Codigo" },
     {
       key: "createdAt",
       label: "Fecha Creacion",
@@ -64,10 +65,10 @@ const CategoriasTable = () => {
         <span>
           {categoria.createdAt
             ? new Date(categoria.createdAt).toLocaleDateString("es-ES", {
-                year: "numeric",
-                month: "2-digit",
-                day: "2-digit",
-              })
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit",
+            })
             : "N/A"}
         </span>
       ),
@@ -79,10 +80,10 @@ const CategoriasTable = () => {
         <span>
           {categoria.updatedAt
             ? new Date(categoria.updatedAt).toLocaleDateString("es-ES", {
-                year: "numeric",
-                month: "2-digit",
-                day: "2-digit",
-              })
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit",
+            })
             : "N/A"}
         </span>
       ),
@@ -106,7 +107,7 @@ const CategoriasTable = () => {
         ? categorias.idCategoria.toString()
         : crypto.randomUUID(),
       estado: Boolean(categorias.estado),
-      idCategoria:categorias.idCategoria
+      idCategoria: categorias.idCategoria
     }));
 
   return (
@@ -162,6 +163,7 @@ const CategoriasTable = () => {
           columns={columns}
           onEdit={handleEdit}
           onDelete={handleState}
+          useDeleteInsteadOfChangeState={true}
           extraHeaderContent={
             <Buton text="Añadir Categoria" onPress={() => setIsOpen(true)} />
           }

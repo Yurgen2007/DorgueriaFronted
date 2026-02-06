@@ -5,9 +5,9 @@ import Modall from "@/components/organismos/modal";
 import { useState } from "react";
 import { FormUpdate } from "@/components/organismos/Sitios/Formupdate";
 import { useSitios } from "@/hooks/sitios/useSitios";
-import { ListarSitios, Sitios } from "@/types/sitios";
+import { Sitios } from "@/types/sitios";
 import { Card, CardBody } from "@heroui/react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import usePermissions from "@/hooks/Usuarios/usePermissions";
 import FormularioSitio from "@/components/organismos/Sitios/FormRegister";
 
@@ -15,7 +15,7 @@ const SitiosTable = () => {
 
   const { userHasPermission } = usePermissions();
 
-  const { sitios, isLoading, isError, error, addSitio, changeState } =
+  const { sitios, isLoading, isError, error, addSitio, removeSitio } =
     useSitios();
 
   //Modal agregar
@@ -26,19 +26,18 @@ const SitiosTable = () => {
   const [IsOpenUpdate, setIsOpenUpdate] = useState(false);
   const [selectedSitio, setSelectedSitio] = useState<Sitios | null>(null);
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  const handleGoToTipo = () => {
-    navigate("/admin/tiposSitio");
-  };
 
   const handleCloseUpdate = () => {
     setIsOpenUpdate(false);
     setSelectedSitio(null);
   };
 
-  const handleState = async (idSitio: number) => {
-    await changeState(idSitio);
+  const handleState = async (sitio: Sitios) => {
+    if (sitio.idSitio) {
+      await removeSitio(sitio.idSitio);
+    }
   };
 
   const handleAddSitio = async (sitio: Sitios) => {
@@ -56,14 +55,14 @@ const SitiosTable = () => {
   };
 
   // Definir las columnas de la tabla
-  const columns: TableColumn<ListarSitios>[] = [
+  const columns: TableColumn<Sitios>[] = [
     { key: "nombre", label: "Nombre" },
-    { key: "personaEncargada", label: "personaEncargada" },
-    { key: "ubicacion", label: "ubicacion" },
+    { key: "estante", label: "Estante" },
+    { key: "pasillo", label: "Pasillo" },
     {
       key: "createdAt",
-      label: "Fecha CReacion",
-      render: (sitio: ListarSitios) => (
+      label: "Fecha Creación",
+      render: (sitio: Sitios) => (
         <span>
           {sitio.createdAt
             ? new Date(sitio.createdAt).toLocaleDateString("es-ES", {
@@ -78,7 +77,7 @@ const SitiosTable = () => {
     {
       key: "updatedAt",
       label: "Fecha Actualización",
-      render: (sitio: ListarSitios) => (
+      render: (sitio: Sitios) => (
         <span>
           {sitio.updatedAt
             ? new Date(sitio.updatedAt).toLocaleDateString("es-ES", {
@@ -90,7 +89,6 @@ const SitiosTable = () => {
         </span>
       ),
     },
-    { key: "estado", label: "Estado" },
   ];
 
   if (isLoading) {
@@ -107,7 +105,6 @@ const SitiosTable = () => {
       ...sitio,
       key: sitio.idSitio ? sitio.idSitio.toString() : crypto.randomUUID(),
       idSitio: sitio.idSitio || 0,
-      estado: Boolean(sitio.estado),
     }));
 
   return (
@@ -118,9 +115,6 @@ const SitiosTable = () => {
             <div className="flex items-center justify-between">
               <h1 className="text-2xl font-bold">Gestionar Sitios</h1>
               <div className="flex gap-2">
-                {userHasPermission(56) &&
-                  <Buton text="Gestionar Tipos" onPress={handleGoToTipo} />
-                }
               </div>
             </div>
           </CardBody>
@@ -163,18 +157,13 @@ const SitiosTable = () => {
         <Globaltable
           data={sitiosWithKey}
           columns={columns}
-          onEdit={userHasPermission(16) ? (item) => {
-            const sitioParaEditar: Sitios = {
-              ...item,
-              fkArea: item.fkArea?.idArea,
-            };
-            handleEdit(sitioParaEditar);
-          } : undefined}
-          onDelete={userHasPermission(17) ? (sitio) => handleState(sitio.idSitio) : undefined}
+          onEdit={userHasPermission(16) ? handleEdit : undefined}
+          onDelete={userHasPermission(17) ? handleState : undefined}
+          useDeleteInsteadOfChangeState={true}
           extraHeaderContent={
             <div>
               {userHasPermission(14) &&
-              <Buton text="Añadir sitio" onPress={() => setIsOpen(true)} />
+                <Buton text="Añadir sitio" onPress={() => setIsOpen(true)} />
               }
             </div>
           }

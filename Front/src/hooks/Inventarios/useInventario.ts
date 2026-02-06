@@ -3,8 +3,9 @@ import {
   agregateStock,
 } from "@/axios/Inventarios/agregateStockInventario";
 import { deleteInventario } from "@/axios/Inventarios/deleteInventario";
+import { deleteInventarioReal } from "@/axios/Inventarios/deleteInventarioReal";
 import { getInventario } from "@/axios/Inventarios/getInventario";
-import { postInventario } from "@/axios/Inventarios/postInventario";
+import { postInventario, InventarioPostData } from "@/axios/Inventarios/postInventario";
 import { putInventario } from "@/axios/Inventarios/putInventario";
 import { Inventario, InventarioConSitio } from "@/types/Inventario";
 import { addToast } from "@heroui/react";
@@ -19,14 +20,31 @@ export function useInventario() {
     staleTime: 0,
     gcTime: 1000 * 60 * 10,
     refetchOnWindowFocus: true,
-    refetchOnMount:true
+    refetchOnMount: true
   });
 
   const addInventarioMutation = useMutation({
-    mutationFn: postInventario,
+    mutationFn: (data: InventarioPostData) => postInventario(data),
     onSuccess: () => {
+      addToast({
+        title: "Inventario Creado",
+        description: "El inventario se ha creado correctamente",
+        color: "success",
+        timeout: 3000,
+        shouldShowTimeoutProgress: true,
+      });
       queryClient.refetchQueries({
         queryKey: ["inventarios"],
+      });
+    },
+    onError: (error) => {
+      console.error("Error al crear inventario:", error);
+      addToast({
+        title: "Error",
+        description: "No se pudo crear el inventario",
+        color: "danger",
+        timeout: 3000,
+        shouldShowTimeoutProgress: true,
       });
     },
   });
@@ -42,8 +60,8 @@ export function useInventario() {
 
   const updateInventarioMutation = useMutation({
     mutationFn: ({ id, data }: { id: number; data: Inventario }) => {
-      const { idInventario, ...resto } = data;
-      return putInventario(id, resto);
+      const { idInventario, acciones, imagenElemento, unidad, tieneCaracteristicas, ...resto } = data;
+      return putInventario(id, resto as any);
     },
     onSuccess: () => {
       queryClient.refetchQueries({
@@ -76,17 +94,39 @@ export function useInventario() {
     },
   });
 
+  const removeInventarioMutation = useMutation({
+    mutationFn: deleteInventarioReal,
+
+    onSuccess: () => {
+      addToast({
+        title: "Inventario eliminado",
+        description: "El inventario se ha eliminado permanentemente",
+        color: "success",
+        timeout: 3000,
+        shouldShowTimeoutProgress: true,
+      });
+      queryClient.refetchQueries({
+        queryKey: ["inventarios"],
+      });
+    },
+
+    onError: (error) => {
+      console.error("Error al eliminar inventario:", error);
+    },
+  });
+
   const agregarStockMutation = useMutation({
     mutationFn: agregateStock,
     onSuccess: () => {
       queryClient.refetchQueries({ queryKey: ["inventarios"] });
+      queryClient.refetchQueries({ queryKey: ["elementos"] });
     },
     onError: (error) => {
       console.error("Error al agregar stock:", error);
     },
   });
 
-  const addInventario = async (inventario: Inventario) => {
+  const addInventario = async (inventario: InventarioPostData) => {
     return addInventarioMutation.mutateAsync(inventario);
   };
 
@@ -96,6 +136,10 @@ export function useInventario() {
 
   const changeState = async (idInventario: number) => {
     return changeStateMutation.mutateAsync(idInventario);
+  };
+
+  const removeInventario = async (idInventario: number) => {
+    return removeInventarioMutation.mutateAsync(idInventario);
   };
 
   const agregarStockInventario = async (data: AgregateStockData) => {
@@ -109,6 +153,7 @@ export function useInventario() {
     error,
     addInventario,
     changeState,
+    removeInventario,
     getInventarioById,
     updateInventario,
     agregarStockInventario,

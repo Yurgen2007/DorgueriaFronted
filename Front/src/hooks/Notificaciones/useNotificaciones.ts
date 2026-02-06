@@ -52,7 +52,6 @@ const { mutate: cambiarEstado } = useMutation({
     );
 
     queryClient.invalidateQueries({ queryKey: ["notificaciones"] });
-    queryClient.invalidateQueries({ queryKey: ["movimientos"] });
   },
 });
 

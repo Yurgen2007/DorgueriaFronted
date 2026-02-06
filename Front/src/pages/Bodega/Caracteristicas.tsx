@@ -2,7 +2,7 @@ import Globaltable from "@/components/organismos/table.tsx"; // Importar la tabl
 import { TableColumn } from "@/components/organismos/table.tsx";
 import Buton from "@/components/molecules/Button";
 import { useState } from "react";
-import {Card, CardBody } from "@heroui/react";
+import { Card, CardBody } from "@heroui/react";
 import { useNavigate } from "react-router-dom";
 import { useCaracteristica } from "@/hooks/Caracteristicas/useCaracteristicas";
 import { Caracteristica } from "@/types/Caracteristica";
@@ -37,10 +37,10 @@ export const CaracteristicasTable = () => {
   const handleAddCaracteristicas = async (caracteristica: Caracteristica) => {
     try {
       await addCaracteristica(caracteristica);
-      
-      handleClose(); 
+
+      handleClose();
     } catch (error) {
-      console.error("Error al agregar el caracteristica de movimiento:", error);
+      console.error("Error al agregar la característica:", error);
     }
   };
 
@@ -52,7 +52,6 @@ export const CaracteristicasTable = () => {
 
   const columns: TableColumn<Caracteristica>[] = [
     { key: "nombre", label: "Nombre" },
-    { key: "simbolo", label: "Simbolo" },
     {
       key: "createdAt",
       label: "Fecha Creación",
@@ -60,10 +59,10 @@ export const CaracteristicasTable = () => {
         <span>
           {caracteristica.createdAt
             ? new Date(caracteristica.createdAt).toLocaleDateString("es-ES", {
-                year: "numeric",
-                month: "2-digit",
-                day: "2-digit",
-              })
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit",
+            })
             : "N/A"}
         </span>
       ),
@@ -75,10 +74,10 @@ export const CaracteristicasTable = () => {
         <span>
           {caracteristica.updatedAt
             ? new Date(caracteristica.updatedAt).toLocaleDateString("es-ES", {
-                year: "numeric",
-                month: "2-digit",
-                day: "2-digit",
-              })
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit",
+            })
             : "N/A"}
         </span>
       ),

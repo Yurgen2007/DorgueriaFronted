@@ -6,18 +6,18 @@ import Buton from "@/components/molecules/Button";
 import { FormUpdate } from "@/components/organismos/CodigoInventario/FormUpdate";
 
 type Props = {
-  idInventario: number;
+  idElemento: number;
   tieneCaracteristicas: boolean;
   isOpen: boolean;
   onClose: () => void;
 };
 
 export const CodigoInventario = ({
-  idInventario,
+  idElemento,
   tieneCaracteristicas,
   isOpen,
 }: Props) => {
-  const { codigos: codigosAll, getCodigosPorInventario } = useCodigoInventario();
+  const { codigos: codigosAll, getCodigosPorElemento } = useCodigoInventario();
   const [codigos, setCodigos] = useState<CodigoInventarioUpdate[]>([]);
   const [isLoadingCo, setIsLoading] = useState(true);
   const [codigoIdSeleccionado, setCodigoIdSeleccionado] = useState<number | null>(null);
@@ -26,7 +26,7 @@ export const CodigoInventario = ({
   const cargarCodigos = async () => {
     setIsLoading(true);
     try {
-      const disponibles = getCodigosPorInventario(idInventario, codigosAll ?? []).filter(
+      const disponibles = getCodigosPorElemento(idElemento, codigosAll ?? []).filter(
         (c) => !c.uso
       );
       setCodigos(disponibles);
@@ -41,7 +41,7 @@ export const CodigoInventario = ({
     if (isOpen && tieneCaracteristicas) {
       cargarCodigos();
     }
-  }, [idInventario, tieneCaracteristicas, isOpen, codigosAll]);
+  }, [idElemento, tieneCaracteristicas, isOpen, codigosAll]);
 
   const handleAbrirEdicion = (idCodigo: number) => {
     setCodigoIdSeleccionado(idCodigo);
@@ -58,7 +58,7 @@ export const CodigoInventario = ({
 
   return (
     <div className="space-y-4">
-      <h2 className="text-lg font-bold">Códigos del Inventario</h2>
+      <h2 className="text-lg font-bold">Códigos del Elemento</h2>
 
       {isLoadingCo ? (
         <p>Cargando códigos...</p>

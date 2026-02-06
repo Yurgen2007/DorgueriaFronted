@@ -29,7 +29,6 @@ export const FormUpdate = ({ caracteristicas, caracteristicaId, id, onclose }: P
     defaultValues: {
       idCaracteristica: foundCaracteristica.idCaracteristica,
       nombre: foundCaracteristica.nombre,
-      simbolo: foundCaracteristica.simbolo,
     },
   });
 
@@ -47,7 +46,7 @@ export const FormUpdate = ({ caracteristicas, caracteristicaId, id, onclose }: P
         shouldShowTimeoutProgress: true,
       });
     } catch (error) {
-      console.log("Error al actualizar el tipo de movimiento : ", error);
+      console.log("Error al actualizar la característica: ", error);
     }
   };
 
@@ -67,20 +66,12 @@ export const FormUpdate = ({ caracteristicas, caracteristicaId, id, onclose }: P
         errorMessage={errors.nombre?.message}
       />
 
-      <Input
-        label="Simbolo"
-        placeholder="Simbolo...."
-        {...register("simbolo")}
-        isInvalid={!!errors.simbolo}
-        errorMessage={errors.simbolo?.message}
-      />
-
-        <Buton
+      <Buton
         text="Guardar"
-          type="submit"
-          isLoading={isSubmitting}
-          className="w-full rounded-xl"
-        />
+        type="submit"
+        isLoading={isSubmitting}
+        className="w-full rounded-xl"
+      />
     </Form>
   );
 };

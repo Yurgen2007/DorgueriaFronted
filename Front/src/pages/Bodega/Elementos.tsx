@@ -1,4 +1,4 @@
-  import Globaltable from "@/components/organismos/table.tsx";
+import Globaltable from "@/components/organismos/table.tsx";
 import { TableColumn } from "@/components/organismos/table.tsx";
 import Buton from "@/components/molecules/Button";
 import Modall from "@/components/organismos/modal";
@@ -16,7 +16,7 @@ export const ElementosTable = () => {
 
   const { userHasPermission } = usePermissions();
 
-  const { elementos, isLoading, isError, error, addElemento, changeState } =
+  const { elementos, isLoading, isError, error, addElemento, removeElemento } =
     useElemento();
 
   //Modal agregar
@@ -46,8 +46,10 @@ export const ElementosTable = () => {
     setSelectedElemento(null);
   };
 
-  const handleState = async (idElemento: number) => {
-    await changeState(idElemento);
+  const handleState = async (elemento: Elemento) => {
+    if (elemento.idElemento) {
+      await removeElemento(elemento.idElemento);
+    }
   };
 
   const handleAddElemento = async (
@@ -74,40 +76,9 @@ export const ElementosTable = () => {
   };
 
   const columns: TableColumn<Elemento>[] = [
-    {
-      label: "Imagen",
-      key: "imagen",
-      render: (item: Elemento) => {
-        const imagen = item.imagen;
-        console.log(imagen);
-  
-        return imagen ? (
-          <img
-            src={`${import.meta.env.VITE_API_CLIENT}img/img/elementos/${imagen}`}
-            alt="Imagen"
-            width={200}
-            height={50}
-          />
-        ) : (
-          <span>Sin imagen</span>
-        );
-      },
-    },
+    
     { key: "nombre", label: "Nombre" },
     { key: "descripcion", label: "Descripcion" },
-    {
-      key: "tipoElemento",
-      label: "Tipo Elemento",
-      render: (elementos: Elemento) => (
-        <span>
-          {elementos.perecedero
-            ? "Perecedero"
-            : elementos.noPerecedero
-              ? "No Perecedero"
-              : "No Especificado"}
-        </span>
-      ),
-    },
     {
       key: "createdAt",
       label: "Fecha Creación",
@@ -125,11 +96,11 @@ export const ElementosTable = () => {
     },
     {
       key: "updatedAt",
-      label: "Fecha Actualización",
+      label: "Fecha Vencimiento",
       render: (elemento: Elemento) => (
         <span>
-          {elemento.updatedAt
-            ? new Date(elemento.updatedAt).toLocaleDateString("es-ES", {
+          {elemento.fechaVencimiento
+            ? new Date(elemento.fechaVencimiento).toLocaleDateString("es-ES", {
               year: "numeric",
               month: "2-digit",
               day: "2-digit",
@@ -229,7 +200,8 @@ export const ElementosTable = () => {
           data={ElementosWithKey}
           columns={columns}
           onEdit={userHasPermission(20) ? handleEdit : undefined}
-          onDelete={userHasPermission(21) ? (elemento) => handleState(elemento.idElemento) : undefined}
+          onDelete={userHasPermission(21) ? handleState : undefined}
+          useDeleteInsteadOfChangeState={true}
           extraHeaderContent={
             <div>
               {userHasPermission(18) &&

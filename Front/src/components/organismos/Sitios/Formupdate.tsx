@@ -29,19 +29,18 @@ export const FormUpdate = ({ sitios, sitioId, id, onclose }: Props) => {
     defaultValues: {
       idSitio: foundSitio?.idSitio,
       nombre: foundSitio?.nombre,
-      personaEncargada: foundSitio?.personaEncargada,
-      ubicacion: foundSitio?.ubicacion,
+      estante: foundSitio?.estante,
+      pasillo: foundSitio?.pasillo,
     },
   });
 
   const onSubmit = async (data: sitioUpdate) => {
-    console.log(data);
     if (!data.idSitio) return;
     try {
       await updateSitio(data.idSitio, data);
       onclose();
       addToast({
-        title: "Actualizacion Exitosa",
+        title: "Actualización Exitosa",
         description: "Sitio actualizado correctamente",
         color: "primary",
         timeout: 3000,
@@ -51,8 +50,6 @@ export const FormUpdate = ({ sitios, sitioId, id, onclose }: Props) => {
       console.log("Error al actualizar el sitio : ", error);
     }
   };
-
-  console.log("Errores", errors);
 
   return (
     <Form
@@ -70,21 +67,21 @@ export const FormUpdate = ({ sitios, sitioId, id, onclose }: Props) => {
       />
 
       <Input
-        label="Persona encargada"
+        label="Estante"
         type="text"
-        placeholder="Encargado"
-        {...register("personaEncargada")}
-        isInvalid={!!errors.personaEncargada}
-        errorMessage={errors.personaEncargada?.message}
+        placeholder="Estante"
+        {...register("estante")}
+        isInvalid={!!errors.estante}
+        errorMessage={errors.estante?.message}
       />
 
       <Input
-        label="Ubicación"
+        label="Pasillo"
         type="text"
-        placeholder="Ubicación"
-        {...register("ubicacion")}
-        isInvalid={!!errors.ubicacion}
-        errorMessage={errors.ubicacion?.message}
+        placeholder="Pasillo"
+        {...register("pasillo")}
+        isInvalid={!!errors.pasillo}
+        errorMessage={errors.pasillo?.message}
       />
 
       <Buton

@@ -27,6 +27,18 @@ export function useCodigoInventario() {
     });
   };
 
+  const getCodigosPorElemento = (
+    idElemento: number,
+    codigosData: CodigoInventario[] = data ?? []
+  ): CodigoInventario[] => {
+    return codigosData.filter((c) => {
+      if (typeof c.fkElemento === "object" && c.fkElemento !== null) {
+        return c.fkElemento.idElemento === idElemento;
+      }
+      return c.fkElemento === idElemento;
+    });
+  };
+
   const getCodigoInventarioById = (
     id: number,
     codigos: CodigoInventario[] | undefined = data
@@ -62,5 +74,6 @@ export function useCodigoInventario() {
     updateCodigoInventario,
     getCodigoInventarioById,
     getCodigosPorInventario,
+    getCodigosPorElemento,
   };
 }

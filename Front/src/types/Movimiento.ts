@@ -6,21 +6,18 @@ export type Movimiento = {
   cantidad?: number;
   horaIngreso?: string | null;
   horaSalida?: string | null;
-  estado?: boolean;
+  venta?: boolean;
+  ingreso?: boolean;
   aceptado?: boolean;
-  enProceso?: boolean;
   cancelado?: boolean;
-  lugarDestino?: string;
-  devolutivo?: boolean;
-  noDevolutivo?: boolean;
+  enProceso?: boolean;
   fechaDevolucion?: Date | string | null;
   createdAt?: string;
   updatedAt?: string;
-  fkUsuario?: number | { nombre: string };
-  fkTipoMovimiento?: number | { nombre: string };
-  fkInventario?: number | { fkElemento?: { nombre: string } };
+  fkUsuario?: number | { idUsuario: number; nombre: string };
+  fkTipoMovimiento?: number | { idTipo: number; nombre: string };
+  fkInventario?: number | { idInventario: number; fkElemento?: { nombre: string } };
   fkSitio?: number;
-  tipo_bien?: string;
   codigos?: string[];
 };
 

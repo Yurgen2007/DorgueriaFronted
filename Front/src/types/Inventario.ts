@@ -1,35 +1,26 @@
 export type CodigoInventario = {
-  fkMovimiento:number
+  fkMovimiento: number
   idCodigoInventario: number;
   codigo: string;
-  uso:boolean
-  baja:boolean
+  uso: boolean
 };
 
 export type Inventario = {
   idInventario?: number;
-  stock?: number;
+  nombre: string;
   estado?: boolean;
   createdAt?: string;
   updatedAt?: string;
-  fkSitio?: number;
-  fkElemento?: number;
-  unidad?:number
-  imagenElemento?: string;
-  acciones?: string;
+  fkSitio?: any; // Can be a number (ID) or an object
+  fkElemento?: any; // Can be a number (ID) or an object
   codigos?: CodigoInventario[];
+  tieneCaracteristicas?: boolean;
+  acciones?: any;
+  imagenElemento?: any;
+  unidad?: any;
 };
 
-
 export type InventarioConSitio = Inventario & {
-  idInventario?: number;
-  stock?: number;
-  estado?: boolean;
-  createdAt?: string;
-  updatedAt?: string;
-  imagenElemento?: string;
-  acciones?: string;
-  codigos?: string[];
   fkSitio: {
     idSitio: number;
     nombre: string;
@@ -37,9 +28,12 @@ export type InventarioConSitio = Inventario & {
   fkElemento: {
     idElemento: number;
     nombre: string;
-    imagenElemento?: string;
-    fkUnidadMedida?:number
-    fkCaracteristica?: number
+    imagen?: string;
+    fkUnidadMedida?: {
+      idUnidad: number;
+      nombre: string;
+    };
+    fkCaracteristica?: any;
   };
 };
 
@@ -51,11 +45,11 @@ export type InventarioConElemento = Inventario & {
   fkElemento: {
     idElemento: number;
     nombre: string;
-    imagenElemento?: string;
-    fkUnidadMedida?:{
-      idUnidad:number
-      nombre:string
-    }
-    fkCaracteristica: boolean;
+    imagen?: string;
+    fkUnidadMedida?: {
+      idUnidad: number;
+      nombre: string;
+    };
+    fkCaracteristica?: any;
   };
 };

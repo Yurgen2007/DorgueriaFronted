@@ -5,44 +5,21 @@ export const sitioUpdateSchema = z.object({
   nombre: z
     .string()
     .min(1, { message: "Nombre es requerido" })
-    .min(2, { message: "Longitud minima de 3" }),
-
-  personaEncargada: z
-    .string()
-    .min(1, { message: "persona encargada es requerido" })
-    .min(3, { message: "Longitud minima de 3" }).optional(),
-
-  ubicacion: z
-    .string()
-    .min(1, { message: "ubicacion es requerido" })
-    .min(2, { message: "Longitud minima de 2" }).optional()
-
+    .min(3, { message: "Longitud mínima de 3" }),
+  estante: z.string().optional(),
+  pasillo: z.string().optional(),
 });
 
 export type sitioUpdate = z.infer<typeof sitioUpdateSchema>;
-
 
 export const sitioCreateSchema = z.object({
   nombre: z
     .string()
     .min(1, { message: "Nombre es requerido" })
-    .min(2, { message: "Longitud minima de 3" }),
-
-  personaEncargada: z
-    .string()
-    .min(1, { message: "persona encargada es requerido" })
-    .min(3, { message: "Longitud minima de 3" }),
-
-  ubicacion: z
-    .string()
-    .min(1, { message: "ubicacion es requerido" })
-    .min(2, { message: "Longitud minima de 2" }),
-
-  estado: z.boolean({ required_error: "Estado es requerido" }),
-
-  fkTipoSitio: z.number({ message: "tipo sitio es requerido" }),
-
-  fkArea: z.number({ message: "area  es requerido" }),
+    .min(3, { message: "Longitud mínima de 3" }),
+  estante: z.string().optional(),
+  pasillo: z.string().optional(),
+  // removing fkTipoSitio and fkArea as they no longer exist in backend sitios table
 });
 
 export type sitioCreate = z.infer<typeof sitioCreateSchema>;

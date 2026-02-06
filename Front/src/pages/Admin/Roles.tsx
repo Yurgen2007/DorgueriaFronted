@@ -13,7 +13,7 @@ import FormularioRoles from "@/components/organismos/Roles/FormRegister";
 import usePermissions from "@/hooks/Usuarios/usePermissions";
 
 export const RolTable = () => {
-  const { roles, isLoading, isError, error, addRol, changeState } = useRol();
+  const { roles, isLoading, isError, error, addRol, removeRol } = useRol();
 
   const { userHasPermission } = usePermissions();
 
@@ -47,8 +47,10 @@ export const RolTable = () => {
     setSelectedRol(null);
   };
 
-  const handleState = async (idRol: number) => {
-    await changeState(idRol);
+  const handleState = async (rol: Rol) => {
+    if (rol.idRol) {
+      await removeRol(rol.idRol);
+    }
   };
 
   const handleAddRol = async (data: Rol) => {
@@ -196,8 +198,9 @@ export const RolTable = () => {
           columns={columns}
           onEdit={userHasPermission(35) ? handleEdit : undefined}
           onDelete={
-            userHasPermission(36) ? (rol) => handleState(rol.idRol) : undefined
+            userHasPermission(36) ? handleState : undefined
           }
+          useDeleteInsteadOfChangeState={true}
           extraHeaderContent={
             <div>
               {userHasPermission(33) && (

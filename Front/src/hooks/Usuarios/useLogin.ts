@@ -9,32 +9,30 @@ import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
 
-export default function useLogin(){
+export default function useLogin() {
 
-    const [isError,setIsError] = useState<boolean>(false);
-    const [error,setError] = useState<string | undefined>(undefined);
+    const [isError, setIsError] = useState<boolean>(false);
+    const [error, setError] = useState<string | undefined>(undefined);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const {setAuthenticated, setNombre, setPerfil,setIdUser,setPermissions} = useAuth();
+    const { setAuthenticated, setIdUser, setPermissions } = useAuth();
 
     const navigate = useNavigate();
 
-    async function login(data : Credenciales){
+    async function login(data: Credenciales) {
         setIsError(false);
         setIsLoading(true);
-        try{
-            const response  = await postLogin(data);
-             console.log(response)
-             
+        try {
+            const response = await postLogin(data);
+            console.log(response)
+
             const token = response.access_token;
             const permissions = response.modules;
-            cookies.set("token",token);
-            cookies.set("permissions",permissions);
+            cookies.set("token", token);
+            cookies.set("permissions", permissions);
             //Auth
-            const {nombre,apellido,perfil,idUsuario} : {nombre : string, apellido : string, perfil: string,idUsuario:number}= jwtDecode(token);
-            setNombre(`${nombre} ${apellido}`);
+            const { idUsuario }: { idUsuario: number } = jwtDecode(token);
             setAuthenticated(true);
-            setPerfil(perfil);
-            setIdUser(idUsuario)
+            setIdUser(idUsuario);
 
             await verificarInventario(idUsuario)
             //Error handling
@@ -44,29 +42,29 @@ export default function useLogin(){
             //Redirection
             navigate("/");
         }
-        catch(error:any){
+        catch (error: any) {
             const errorMessage = error.message;
             console.log(errorMessage)
             setIsError(true);
             setError(errorMessage);
         }
-        finally{
+        finally {
             setIsLoading(false);
         }
     }
 
-    async function logout(){
-        try{
+    async function logout() {
+        try {
             cookies.remove("token");
             navigate('/login');
         }
 
 
-        catch(error){
+        catch (error) {
             console.log(error);
         }
     }
 
-    return{login,isError,error,logout,isLoading};
+    return { login, isError, error, logout, isLoading };
 }
 

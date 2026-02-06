@@ -5,6 +5,7 @@ import { putElemento } from "@/axios/Elementos/putElemento";
 import { deleteElemento } from "@/axios/Elementos/deleteElemento";
 import { getElemento } from "@/axios/Elementos/getElemento";
 import { addToast } from "@heroui/react";
+import { axiosAPI } from "@/axios/axiosAPI";
 
 export function useElemento() {
   const queryClient = useQueryClient();
@@ -51,9 +52,11 @@ export function useElemento() {
     },
   });
 
+  // Mutación para cambiar estado (usando patch)
   const changeStateMutation = useMutation({
-    mutationFn: deleteElemento,
-
+    mutationFn: async (idElemento: number) => {
+      await axiosAPI.patch(`elementos/state/${idElemento}`);
+    },
     onSuccess: () => {
       addToast({
         title: "Estado cambiado con exito",
@@ -71,6 +74,26 @@ export function useElemento() {
     },
   });
 
+  // Mutación para eliminar elemento (usando delete)
+  const removeElementoMutation = useMutation({
+    mutationFn: deleteElemento,
+    onSuccess: () => {
+      addToast({
+        title: "Elemento eliminado correctamente",
+        color: "success",
+        timeout: 3000,
+        shouldShowTimeoutProgress: true,
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["elementos"],
+      });
+    },
+
+    onError: (error) => {
+      console.error("Error al eliminar:", error);
+    },
+  });
+
   const addElemento = async (elemento: postElementos) => {
     return await addElementoMutation.mutateAsync(elemento);
   };
@@ -83,6 +106,10 @@ export function useElemento() {
     return changeStateMutation.mutateAsync(idElemento);
   };
 
+  const removeElemento = async (idElemento: number) => {
+    return removeElementoMutation.mutateAsync(idElemento);
+  };
+
   return {
     elementos: data,
     isLoading,
@@ -90,6 +117,7 @@ export function useElemento() {
     error,
     addElemento,
     changeState,
+    removeElemento,
     getElementoById,
     updateElemento,
   };

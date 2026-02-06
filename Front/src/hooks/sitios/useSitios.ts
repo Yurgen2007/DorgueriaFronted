@@ -1,4 +1,5 @@
 import { deleteSitio } from "@/axios/Sitios/deleteSitio";
+import { deleteSitioReal } from "@/axios/Sitios/deleteSitioReal";
 import { getSitio } from "@/axios/Sitios/getSitio";
 import { postSitio } from "@/axios/Sitios/postSitio";
 import { putSitio } from "@/axios/Sitios/putSitio";
@@ -72,6 +73,27 @@ export function useSitios() {
     },
   });
 
+  // Mutación para eliminar sitio (usando delete real)
+  const removeSitioMutation = useMutation({
+    mutationFn: deleteSitioReal,
+
+    onSuccess: () => {
+      addToast({
+        title: "Sitio eliminado correctamente",
+        color: "success",
+        timeout: 3000,
+        shouldShowTimeoutProgress: true,
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["sitios"],
+      });
+    },
+
+    onError: (error) => {
+      console.error("Error al eliminar:", error);
+    },
+  });
+
   const addSitio = async (sitio: Sitios) => {
     return addSitioMutation.mutateAsync(sitio);
   };
@@ -84,6 +106,10 @@ export function useSitios() {
     return changeStateMutation.mutateAsync(idSitio);
   };
 
+  const removeSitio = async (idSitio: number) => {
+    return removeSitioMutation.mutateAsync(idSitio);
+  };
+
   return {
     sitios: data,
     isLoading,
@@ -91,6 +117,7 @@ export function useSitios() {
     error,
     addSitio,
     changeState,
+    removeSitio,
     getSitioById,
     updateSitio,
   };
