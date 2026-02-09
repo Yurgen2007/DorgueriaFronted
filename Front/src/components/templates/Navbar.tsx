@@ -8,10 +8,12 @@ import {
   User,
   DropdownItem,
 } from "@heroui/react";
-import { FormatrackLogo } from "../atoms/Icons";
 import { BellIcon } from "@heroicons/react/24/outline";
 import { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
+
+import { FormatrackLogo } from "../atoms/Icons";
+
 import { useAuth } from "@/providers/AuthProvider";
 
 type NavProps = {
@@ -33,7 +35,7 @@ export function Nav({
       <NavbarContent justify="start">
         <NavbarBrand className="mr-4">
           <FormatrackLogo />
-          <p className="hidden sm:block font-bold text-inherit">Formatrack</p>
+          <p className="hidden sm:block font-bold text-inherit">FarmaMedica</p>
         </NavbarBrand>
       </NavbarContent>
 
@@ -56,36 +58,34 @@ export function Nav({
 
           <DropdownMenu aria-label="Notificaciones" className="max-w-sm w-72">
             <DropdownItem
-              textValue="notificaciones"
-              className="font-semibold text-center"
-              isReadOnly
               key="notificaciones-header"
+              isReadOnly
+              className="font-semibold text-center"
+              textValue="notificaciones"
             >
               Notificaciones
             </DropdownItem>
 
             <DropdownItem
+              key="ver-todo"
+              className="text-center text-primary hover:underline"
               textValue="ver-todo"
               onPress={onOpenNotifications}
-              className="text-center text-blue-500 hover:underline"
-              key="ver-todo"
             >
               Ver todo
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
 
-        <div>
-          {children}
-        </div>
+        <div>{children}</div>
 
         <User
-          name={nombre}
           avatarProps={{
             src: `${import.meta.env.VITE_API_CLIENT}img/perfiles/${perfil ?? "defaultPerfil.png"}`,
             onClick: () => navigate("/perfil"),
             isBordered: true,
           }}
+          name={nombre}
         />
       </div>
     </Navbar>

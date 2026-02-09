@@ -1,4 +1,5 @@
 import { Link, useParams } from "react-router-dom";
+
 import { InventariosTable } from "@/pages/Bodega/Inventario/Tablas/Inventarios";
 import { useSitios } from "@/hooks/sitios/useSitios";
 import Buton from "@/components/molecules/Button";
@@ -15,11 +16,15 @@ export const InventarioSitio = () => {
   const sitio = sitios?.find((s) => s.idSitio === idSitios);
 
   if (!sitio) return <p>Sitio no encontrado</p>;
+
   return (
     <div>
       <Link to={`/bodega/inventario/`}>
         <h2 className="text-lg m-4 font-semibold">
-          <Buton text="Regresar " className=" hover hover:text-white dark:hover:text-white" />
+          <Buton
+            className=" hover hover:text-white dark:hover:text-white"
+            text="Regresar "
+          />
         </h2>
       </Link>
       <h1 className="text-2xl font-bold text-center mb-4">

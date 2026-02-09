@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { Form } from "@heroui/form";
 import { Input } from "@heroui/input";
 import { addToast } from "@heroui/react";
+
 import { sitioCreate, sitioCreateSchema } from "@/schemas/sitios";
 
 type FormularioProps = {
@@ -43,35 +44,35 @@ export default function FormularioSitio({
 
   return (
     <Form
+      className="w-full space-y-4"
       id={id}
       onSubmit={handleSubmit(onSubmit)}
-      className="w-full space-y-4"
     >
       <Input
         label="Nombre del sitio"
-        type="text"
         placeholder="Ej: Vitrina Principal"
+        type="text"
         {...register("nombre")}
-        isInvalid={!!errors.nombre}
         errorMessage={errors.nombre?.message}
+        isInvalid={!!errors.nombre}
       />
 
       <Input
         label="Estante"
-        type="text"
         placeholder="Ej: A-1"
+        type="text"
         {...register("estante")}
-        isInvalid={!!errors.estante}
         errorMessage={errors.estante?.message}
+        isInvalid={!!errors.estante}
       />
 
       <Input
         label="Pasillo"
-        type="text"
         placeholder="Ej: Pasillo 2"
+        type="text"
         {...register("pasillo")}
-        isInvalid={!!errors.pasillo}
         errorMessage={errors.pasillo?.message}
+        isInvalid={!!errors.pasillo}
       />
     </Form>
   );

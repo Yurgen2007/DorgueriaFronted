@@ -2,7 +2,7 @@ import { Form } from "@heroui/form";
 import { Input } from "@heroui/react";
 import { useForm } from "react-hook-form";
 import { addToast } from "@heroui/react";
-import Buton from "@/components/molecules/Button";
+
 import { useInventario } from "@/hooks/Inventarios/useInventario";
 
 type FormularioProps = {
@@ -52,7 +52,11 @@ export default function FormInventario({ onClose, id }: FormularioProps) {
   };
 
   return (
-    <Form id={id} onSubmit={handleSubmit(onSubmit)} className="w-full space-y-4">
+    <Form
+      className="w-full space-y-4"
+      id={id}
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <Input
         label="Nombre del Inventario"
         placeholder="Ingresa el nombre del inventario"
@@ -63,8 +67,8 @@ export default function FormInventario({ onClose, id }: FormularioProps) {
             message: "El nombre debe tener al menos 3 caracteres",
           },
         })}
-        isInvalid={!!errors.nombre}
         errorMessage={errors.nombre?.message as string}
+        isInvalid={!!errors.nombre}
       />
     </Form>
   );

@@ -18,10 +18,16 @@ export const ElementoUpdateSchema = z.object({
         file === undefined || file instanceof File || typeof file === "string",
       {
         message: "La imagen debe ser un archivo o una URL válida",
-      }
+      },
     )
     .optional()
     .nullable(),
+  codigoBarras: z
+    .string()
+    .min(1, { message: "Código de barras es requerido" })
+    .regex(/^(\d{8}|\d{12}|\d{13})$/, {
+      message: "Código de barras inválido. Use 8, 12 o 13 dígitos numéricos",
+    }),
   fkUnidadMedida: z.number({ required_error: "Unidad es requerida" }),
   fkCategoria: z.number({ required_error: "Categoría es requerida" }),
   fkCaracteristica: z.number().optional().nullable(),
@@ -50,24 +56,38 @@ export const ElementoCreateSchema = z.object({
         file === undefined || file instanceof File || typeof file === "string",
       {
         message: "La imagen debe ser un archivo o una URL válida",
-      }
+      },
     )
     .optional()
     .nullable(),
-  fkUnidadMedida: z.number({ required_error: "Unidad es requerida" }).refine(val => val !== null && val !== undefined && !isNaN(val), {
-    message: "Unidad es requerida",
-  }),
-  fkCategoria: z.number({ required_error: "Categoría es requerida" }).refine(val => val !== null && val !== undefined && !isNaN(val), {
-    message: "Categoría es requerida",
-  }),
+  fkUnidadMedida: z
+    .number({ required_error: "Unidad es requerida" })
+    .refine((val) => val !== null && val !== undefined && !isNaN(val), {
+      message: "Unidad es requerida",
+    }),
+  fkCategoria: z
+    .number({ required_error: "Categoría es requerida" })
+    .refine((val) => val !== null && val !== undefined && !isNaN(val), {
+      message: "Categoría es requerida",
+    }),
   fkCaracteristica: z.number().optional().nullable(),
   fechaVencimiento: z.string().optional().nullable(),
-  fkSitio: z.number({ required_error: "Sitio es requerido" }).refine(val => val !== null && val !== undefined && !isNaN(val), {
-    message: "Sitio es requerido",
-  }),
-  fkInventario: z.number({ required_error: "Inventario es requerido" }).refine(val => val !== null && val !== undefined && !isNaN(val), {
-    message: "Inventario es requerido",
-  }),
+  fkSitio: z
+    .number({ required_error: "Sitio es requerido" })
+    .refine((val) => val !== null && val !== undefined && !isNaN(val), {
+      message: "Sitio es requerido",
+    }),
+  fkInventario: z
+    .number({ required_error: "Inventario es requerido" })
+    .refine((val) => val !== null && val !== undefined && !isNaN(val), {
+      message: "Inventario es requerido",
+    }),
+  codigoBarras: z
+    .string()
+    .min(1, { message: "Código de barras es requerido" })
+    .regex(/^(\d{8}|\d{12}|\d{13})$/, {
+      message: "Código de barras inválido. Use 8, 12 o 13 dígitos numéricos",
+    }),
   stock: z.coerce.number(),
 });
 

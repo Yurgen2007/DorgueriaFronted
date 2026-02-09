@@ -1,19 +1,20 @@
+import { useState } from "react";
+import { Card, CardBody } from "@heroui/react";
+import { useNavigate } from "react-router-dom";
+
 import Globaltable from "@/components/organismos/table.tsx";
 import { TableColumn } from "@/components/organismos/table.tsx";
 import Buton from "@/components/molecules/Button";
 import Modall from "@/components/organismos/modal";
-import { useState } from "react";
 import { useElemento } from "@/hooks/Elementos/useElemento";
 import { Elemento } from "@/types/Elemento";
 import { FormUpdate } from "@/components/organismos/Elementos/FormUpdate";
-import { Card, CardBody } from "@heroui/react";
-import { useNavigate } from "react-router-dom";
-import { ElementoCreate } from "@/schemas/Elemento";
+import { postElementos } from "@/types/Elemento";
 import usePermissions from "@/hooks/Usuarios/usePermissions";
 import FormularioElementos from "@/components/organismos/Elementos/FormRegister";
+import { formatDateColombia } from "@/utils/dateUtils";
 
 export const ElementosTable = () => {
-
   const { userHasPermission } = usePermissions();
 
   const { elementos, isLoading, isError, error, addElemento, removeElemento } =
@@ -26,7 +27,7 @@ export const ElementosTable = () => {
   //Modal actualizar
   const [IsOpenUpdate, setIsOpenUpdate] = useState(false);
   const [selectedElemento, setSelectedElemento] = useState<Elemento | null>(
-    null
+    null,
   );
 
   const navigate = useNavigate();
@@ -53,16 +54,18 @@ export const ElementosTable = () => {
   };
 
   const handleAddElemento = async (
-    elemento: ElementoCreate
+    elemento: postElementos,
   ): Promise<{ idElemento: number }> => {
     try {
       const response = await addElemento(elemento);
+
       if (!response || !response.idElemento) {
         throw new Error(
-          "No se pudo agregar el elemento. La respuesta no contiene idElemento."
+          "No se pudo agregar el elemento. La respuesta no contiene idElemento.",
         );
       }
       handleClose(); // Cierra el modal solo si se ha agregado correctamente
+
       return { idElemento: response.idElemento };
     } catch (error) {
       console.error("Error al agregar el usuario:", error);
@@ -76,7 +79,6 @@ export const ElementosTable = () => {
   };
 
   const columns: TableColumn<Elemento>[] = [
-    
     { key: "nombre", label: "Nombre" },
     { key: "descripcion", label: "Descripcion" },
     {
@@ -86,10 +88,10 @@ export const ElementosTable = () => {
         <span>
           {elemento.createdAt
             ? new Date(elemento.createdAt).toLocaleDateString("es-ES", {
-              year: "numeric",
-              month: "2-digit",
-              day: "2-digit",
-            })
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+              })
             : "N/A"}
         </span>
       ),
@@ -100,11 +102,7 @@ export const ElementosTable = () => {
       render: (elemento: Elemento) => (
         <span>
           {elemento.fechaVencimiento
-            ? new Date(elemento.fechaVencimiento).toLocaleDateString("es-ES", {
-              year: "numeric",
-              month: "2-digit",
-              day: "2-digit",
-            })
+            ? formatDateColombia(elemento.fechaVencimiento)
             : "N/A"}
         </span>
       ),
@@ -139,21 +137,21 @@ export const ElementosTable = () => {
             <div className="flex items-center justify-between">
               <h1 className="text-2xl font-bold">Gestionar Elementos</h1>
               <div className="flex gap-2">
-                {userHasPermission(60) &&
+                {userHasPermission(60) && (
                   <Buton text="Gestionar Unidad" onPress={handleGoToUnidad} />
-                }
-                {userHasPermission(64) &&
+                )}
+                {userHasPermission(64) && (
                   <Buton
                     text="Gestionar Categoria"
                     onPress={handleGoToCategoria}
                   />
-                }
-                {userHasPermission(68) &&
+                )}
+                {userHasPermission(68) && (
                   <Buton
                     text="Gestionar Caracteristica"
                     onPress={handleGoToCaracteristica}
                   />
-                }
+                )}
               </div>
             </div>
           </CardBody>
@@ -166,16 +164,16 @@ export const ElementosTable = () => {
         onOpenChange={handleClose}
       >
         <FormularioElementos
-          id="element-form"
           addData={handleAddElemento}
+          id="element-form"
           onClose={handleClose}
         />
         <div className="justify-center pt-2">
           <Buton
+            className="w-full p-2 rounded-xl"
+            form="element-form"
             text="Guardar"
             type="submit"
-            form="element-form"
-            className="w-full p-2 rounded-xl"
           />
         </div>
       </Modall>
@@ -185,10 +183,10 @@ export const ElementosTable = () => {
         isOpen={IsOpenUpdate}
         onOpenChange={handleCloseUpdate}
       >
-        {selectedElemento && (
+        {selectedElemento && typeof selectedElemento.idElemento === 'number' && (
           <FormUpdate
+            elementoId={selectedElemento.idElemento}
             elementos={ElementosWithKey ?? []}
-            elementoId={selectedElemento.idElemento as number}
             id="FormUpdate"
             onclose={handleCloseUpdate}
           />
@@ -197,18 +195,18 @@ export const ElementosTable = () => {
 
       {userHasPermission(19) && ElementosWithKey && (
         <Globaltable
-          data={ElementosWithKey}
           columns={columns}
-          onEdit={userHasPermission(20) ? handleEdit : undefined}
-          onDelete={userHasPermission(21) ? handleState : undefined}
-          useDeleteInsteadOfChangeState={true}
+          data={ElementosWithKey}
           extraHeaderContent={
             <div>
-              {userHasPermission(18) &&
+              {userHasPermission(18) && (
                 <Buton text="Nuevo elemento" onPress={() => setIsOpen(true)} />
-              }
+              )}
             </div>
           }
+          useDeleteInsteadOfChangeState={true}
+          onDelete={userHasPermission(21) ? handleState : undefined}
+          onEdit={userHasPermission(20) ? handleEdit : undefined}
         />
       )}
     </div>

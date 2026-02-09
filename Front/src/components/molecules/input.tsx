@@ -11,11 +11,24 @@ type InputProps = {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   error?: string;
   selectedKey?: string;
-  accept?: string
+  accept?: string;
 };
-export default function Inpu({label,placeholder,type,name,isRequired,labelPlacement,value,onChange,error,accept }: InputProps) {
+export default function Inpu({
+  label,
+  placeholder,
+  type,
+  name,
+  isRequired,
+  labelPlacement,
+  value,
+  onChange,
+  error,
+  accept,
+}: InputProps) {
   return (
     <Input
+      accept={accept}
+      className={error ? "border-red-500" : ""}
       isRequired={isRequired}
       label={label}
       labelPlacement={labelPlacement}
@@ -24,11 +37,9 @@ export default function Inpu({label,placeholder,type,name,isRequired,labelPlacem
       type={type}
       value={value}
       onChange={onChange}
-      accept={accept}
-      className={error ? "border-red-500" : ""}
-      {...error && (
+      {...(error && (
         <span className="text-sm text-red-500 mt-1 ml-1">{error}</span>
-      )}
+      ))}
     />
   );
 }

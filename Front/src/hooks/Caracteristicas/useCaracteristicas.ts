@@ -1,8 +1,9 @@
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
 import { getCaracteristicas } from "@/axios/Caracteristicas/getCaracteris";
 import { postCaracteristica } from "@/axios/Caracteristicas/postCaracteris";
 import { updateCategoria } from "@/axios/Caracteristicas/putCaracteris";
 import { Caracteristica } from "@/types/Caracteristica";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export function useCaracteristica() {
   const queryClient = useQueryClient();
@@ -28,11 +29,11 @@ export function useCaracteristica() {
 
   const getCaracteristicaById = (
     id: number,
-    caracteristicas: Caracteristica[] | undefined = data
+    caracteristicas: Caracteristica[] | undefined = data,
   ): Caracteristica | null => {
     return (
       caracteristicas?.find(
-        (caracteristica) => caracteristica.idCaracteristica === id
+        (caracteristica) => caracteristica.idCaracteristica === id,
       ) || null
     );
   };
@@ -40,6 +41,7 @@ export function useCaracteristica() {
   const updateCaracteristicaMutation = useMutation({
     mutationFn: ({ id, data }: { id: number; data: Caracteristica }) => {
       const { idCaracteristica, ...resto } = data;
+
       return updateCategoria(id, resto);
     },
     onSuccess: () => {

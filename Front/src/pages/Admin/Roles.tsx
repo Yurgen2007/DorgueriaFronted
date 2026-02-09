@@ -1,13 +1,14 @@
+import { useState } from "react";
+import { Card, CardBody } from "@heroui/react";
+import { useNavigate } from "react-router-dom";
+
 import Globaltable from "@/components/organismos/table.tsx"; // Importar la tabla reutilizable
 import { TableColumn } from "@/components/organismos/table.tsx";
 import Buton from "@/components/molecules/Button";
 import Modall from "@/components/organismos/modal";
-import { useState } from "react";
 import { useRol } from "@/hooks/Roles/useRol";
 import { FormUpdate } from "@/components/organismos/Roles/FormUpdate";
 import { Rol } from "@/types/Rol";
-import { Card, CardBody } from "@heroui/react";
-import { useNavigate } from "react-router-dom";
 import FormularioRolPermiso from "@/components/organismos/RolPermiso/FormularioRolPermiso";
 import FormularioRoles from "@/components/organismos/Roles/FormRegister";
 import usePermissions from "@/hooks/Usuarios/usePermissions";
@@ -126,7 +127,7 @@ export const RolTable = () => {
 
   const rolesWithKey = roles
     ?.filter(
-      (rol) => rol?.idRol !== undefined && rol?.createdAt && rol?.updatedAt
+      (rol) => rol?.idRol !== undefined && rol?.createdAt && rol?.updatedAt,
     )
     .map((rol) => ({
       ...rol,
@@ -155,15 +156,15 @@ export const RolTable = () => {
         onOpenChange={handleClose}
       >
         <FormularioRoles
-          id="rol-form"
           addData={handleAddRol}
+          id="rol-form"
           onClose={handleClose}
         />
         <Buton
+          className="w-full rounded-xl"
+          form="rol-form"
           text="Guardar"
           type="submit"
-          form="rol-form"
-          className="w-full rounded-xl"
         />
       </Modall>
 
@@ -174,17 +175,17 @@ export const RolTable = () => {
       >
         {selectedRol && (
           <FormUpdate
-            roles={rolesWithKey ?? []}
-            rolId={selectedRol.idRol as number}
             id="FormUpdate"
             onclose={handleCloseUpdate}
+            rolId={selectedRol.idRol as number}
+            roles={rolesWithKey ?? []}
           />
         )}
       </Modall>
       <Modall
-        size="5xl"
         ModalTitle="Asignar Permisos"
         isOpen={showPermisosModal}
+        size="5xl"
         onOpenChange={handleCerrarPermisos}
       >
         {typeof rolParaPermisos === "number" && (
@@ -194,13 +195,8 @@ export const RolTable = () => {
 
       {userHasPermission(34) && rolesWithKey && (
         <Globaltable
-          data={rolesWithKey}
           columns={columns}
-          onEdit={userHasPermission(35) ? handleEdit : undefined}
-          onDelete={
-            userHasPermission(36) ? handleState : undefined
-          }
-          useDeleteInsteadOfChangeState={true}
+          data={rolesWithKey}
           extraHeaderContent={
             <div>
               {userHasPermission(33) && (
@@ -208,6 +204,9 @@ export const RolTable = () => {
               )}
             </div>
           }
+          useDeleteInsteadOfChangeState={true}
+          onDelete={userHasPermission(36) ? handleState : undefined}
+          onEdit={userHasPermission(35) ? handleEdit : undefined}
         />
       )}
     </div>

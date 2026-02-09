@@ -1,18 +1,19 @@
+import { useState } from "react";
+import { Card, CardBody } from "@heroui/react";
+
 import Globaltable from "@/components/organismos/table.tsx"; // Importar la tabla reutilizable
 import { TableColumn } from "@/components/organismos/table.tsx";
 import Buton from "@/components/molecules/Button";
 import Modall from "@/components/organismos/modal";
-import { useState } from "react";
 import { FormUpdate } from "@/components/organismos/Sitios/Formupdate";
 import { useSitios } from "@/hooks/sitios/useSitios";
 import { Sitios } from "@/types/sitios";
-import { Card, CardBody } from "@heroui/react";
+
 // import { useNavigate } from "react-router-dom";
 import usePermissions from "@/hooks/Usuarios/usePermissions";
 import FormularioSitio from "@/components/organismos/Sitios/FormRegister";
 
 const SitiosTable = () => {
-
   const { userHasPermission } = usePermissions();
 
   const { sitios, isLoading, isError, error, addSitio, removeSitio } =
@@ -27,7 +28,6 @@ const SitiosTable = () => {
   const [selectedSitio, setSelectedSitio] = useState<Sitios | null>(null);
 
   // const navigate = useNavigate();
-
 
   const handleCloseUpdate = () => {
     setIsOpenUpdate(false);
@@ -66,10 +66,10 @@ const SitiosTable = () => {
         <span>
           {sitio.createdAt
             ? new Date(sitio.createdAt).toLocaleDateString("es-ES", {
-              year: "numeric",
-              month: "2-digit",
-              day: "2-digit",
-            })
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+              })
             : "N/A"}
         </span>
       ),
@@ -81,10 +81,10 @@ const SitiosTable = () => {
         <span>
           {sitio.updatedAt
             ? new Date(sitio.updatedAt).toLocaleDateString("es-ES", {
-              year: "numeric",
-              month: "2-digit",
-              day: "2-digit",
-            })
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+              })
             : "N/A"}
         </span>
       ),
@@ -114,8 +114,7 @@ const SitiosTable = () => {
           <CardBody>
             <div className="flex items-center justify-between">
               <h1 className="text-2xl font-bold">Gestionar Sitios</h1>
-              <div className="flex gap-2">
-              </div>
+              <div className="flex gap-2" />
             </div>
           </CardBody>
         </Card>
@@ -126,15 +125,15 @@ const SitiosTable = () => {
         onOpenChange={handleClose}
       >
         <FormularioSitio
-          id="sitio-form"
           addData={handleAddSitio}
+          id="sitio-form"
           onClose={handleClose}
         />
         <Buton
+          className="w-full rounded-xl"
+          form="sitio-form"
           text="Guardar"
           type="submit"
-          form="sitio-form"
-          className="w-full rounded-xl"
         />
       </Modall>
 
@@ -145,28 +144,28 @@ const SitiosTable = () => {
       >
         {selectedSitio && (
           <FormUpdate
-            sitios={sitiosWithKey ?? []}
-            sitioId={selectedSitio.idSitio as number}
             id="FormUpdate"
             onclose={handleCloseUpdate}
+            sitioId={selectedSitio.idSitio as number}
+            sitios={sitiosWithKey ?? []}
           />
         )}
       </Modall>
 
       {userHasPermission(15) && sitiosWithKey && (
         <Globaltable
-          data={sitiosWithKey}
           columns={columns}
-          onEdit={userHasPermission(16) ? handleEdit : undefined}
-          onDelete={userHasPermission(17) ? handleState : undefined}
-          useDeleteInsteadOfChangeState={true}
+          data={sitiosWithKey}
           extraHeaderContent={
             <div>
-              {userHasPermission(14) &&
+              {userHasPermission(14) && (
                 <Buton text="Añadir sitio" onPress={() => setIsOpen(true)} />
-              }
+              )}
             </div>
           }
+          useDeleteInsteadOfChangeState={true}
+          onDelete={userHasPermission(17) ? handleState : undefined}
+          onEdit={userHasPermission(16) ? handleEdit : undefined}
         />
       )}
     </div>

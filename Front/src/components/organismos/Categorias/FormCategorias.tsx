@@ -3,6 +3,7 @@ import { Input } from "@heroui/input";
 import { addToast, Select, SelectItem } from "@heroui/react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+
 import { CategoriaSchema, Categoria } from "@/schemas/Categorias";
 
 type FormularioProps = {
@@ -47,17 +48,17 @@ export default function FormCategorias({
 
   return (
     <Form
+      className="w-full space-y-4"
       id={id}
       onSubmit={handleSubmit(onSubmit)}
-      className="w-full space-y-4"
     >
       <Input
         label="Nombre"
-        type="text"
         placeholder="Nombre"
+        type="text"
         {...register("nombre")}
-        isInvalid={!!errors.nombre}
         errorMessage={errors.nombre?.message}
+        isInvalid={!!errors.nombre}
       />
       <Controller
         control={control}
@@ -67,12 +68,12 @@ export default function FormCategorias({
             label="Estado"
             placeholder="Selecciona estado"
             {...field}
-            value={field.value ? "true" : "false"}
-            onChange={(e) => field.onChange(e.target.value === "true")}
-            isInvalid={!!errors.estado}
-            errorMessage={errors.estado?.message}
             isDisabled
             defaultSelectedKeys={["true"]}
+            errorMessage={errors.estado?.message}
+            isInvalid={!!errors.estado}
+            value={field.value ? "true" : "false"}
+            onChange={(e) => field.onChange(e.target.value === "true")}
           >
             <SelectItem key="true">Activo</SelectItem>
             <SelectItem key="false">Inactivo</SelectItem>

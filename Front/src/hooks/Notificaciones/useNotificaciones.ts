@@ -1,10 +1,11 @@
-import { useQuery, useMutation, useQueryClient} from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+
 import { getNotificacionesPorUsuario } from "@/axios/Notificaciones/getNotificacionesPorUsuario";
 import { marcarComoLeida } from "@/axios/Notificaciones/marcarComoLeida";
 import { cambiarEstadoNotificacion } from "@/axios/Notificaciones/cambiarEstado";
 import { useSocketNotificaciones } from "@/hooks/Notificaciones/useSocketNotificaciones";
 import { Notificacion } from "@/types/Notificacion";
-import { useEffect, useState } from "react";
 
 export function useNotificaciones(usuarioId: number) {
   const queryClient = useQueryClient();
@@ -20,11 +21,14 @@ export function useNotificaciones(usuarioId: number) {
     if (data) setNotificaciones(data);
   }, [data]);
 
-
   useSocketNotificaciones(usuarioId, (nueva: Notificacion) => {
     setNotificaciones((prev) => {
-      const yaExiste = prev.some((n) => n.idNotificacion === nueva.idNotificacion);
+      const yaExiste = prev.some(
+        (n) => n.idNotificacion === nueva.idNotificacion,
+      );
+
       if (yaExiste) return prev;
+
       return [nueva, ...prev];
     });
   });
@@ -32,28 +36,34 @@ export function useNotificaciones(usuarioId: number) {
   const { mutate: marcarLeida } = useMutation({
     mutationFn: marcarComoLeida,
     onSuccess: (_, idNoti) => {
+      // Ahora eliminamos la notificacion del estado local ya que se elimina del backend
       setNotificaciones((prev) =>
-        prev.map((n) =>
-          n.idNotificacion === idNoti ? { ...n, leido: true } : n
-        )
+        prev.filter((n) => n.idNotificacion !== idNoti),
       );
+      // Invalidamos la query para recargar desde el servidor
+      queryClient.invalidateQueries({ queryKey: ["notificaciones"] });
     },
   });
 
-const { mutate: cambiarEstado } = useMutation({
-  mutationFn: ({ id, estado }: { id: number; estado: 'aceptado' | 'cancelado' }) =>
-    cambiarEstadoNotificacion(id, estado),
+  const { mutate: cambiarEstado } = useMutation({
+    mutationFn: ({
+      id,
+      estado,
+    }: {
+      id: number;
+      estado: "aceptado" | "cancelado";
+    }) => cambiarEstadoNotificacion(id, estado),
 
-  onSuccess: (_, { id, estado }) => {
-    setNotificaciones((prev) =>
-      prev.map((n) =>
-        n.idNotificacion === id ? { ...n, estado, leido: true } : n
-      )
-    );
+    onSuccess: (_, { id, estado }) => {
+      setNotificaciones((prev) =>
+        prev.map((n) =>
+          n.idNotificacion === id ? { ...n, estado, leido: true } : n,
+        ),
+      );
 
-    queryClient.invalidateQueries({ queryKey: ["notificaciones"] });
-  },
-});
+      queryClient.invalidateQueries({ queryKey: ["notificaciones"] });
+    },
+  });
 
   return {
     notificaciones,
@@ -61,7 +71,7 @@ const { mutate: cambiarEstado } = useMutation({
     error,
     marcarLeida,
     cambiarEstado,
-    setNotificaciones, 
-    refetch
+    setNotificaciones,
+    refetch,
   };
 }

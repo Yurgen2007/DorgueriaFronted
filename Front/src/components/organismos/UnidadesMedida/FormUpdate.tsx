@@ -2,9 +2,10 @@ import { Form } from "@heroui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Input } from "@heroui/input";
+import { addToast } from "@heroui/react";
+
 import { useUnidad } from "@/hooks/UnidadesMedida/useUnidad";
 import { UnidadUpdate, UnidadUpdateSchema } from "@/schemas/Unidad";
-import { addToast } from "@heroui/react";
 import Buton from "@/components/molecules/Button";
 
 type Props = {
@@ -54,24 +55,23 @@ export const FormUpdate = ({ unidades, unidadId, id, onclose }: Props) => {
 
   return (
     <Form
-      id={id}
       className="w-full space-y-4"
+      id={id}
       onSubmit={handleSubmit(onSubmit)}
     >
       <Input
         label="Nombre"
         placeholder="Nombre"
         {...register("nombre")}
-        isInvalid={!!errors.nombre}
         errorMessage={errors.nombre?.message}
+        isInvalid={!!errors.nombre}
       />
-        <Buton
-          text="Guardar"
-          type="submit"
-          isLoading={isSubmitting}
-          className="w-full  rounded-xl"
-        />
-
+      <Buton
+        className="w-full  rounded-xl"
+        isLoading={isSubmitting}
+        text="Guardar"
+        type="submit"
+      />
     </Form>
   );
 };

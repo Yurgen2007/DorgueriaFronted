@@ -1,13 +1,14 @@
+import { useState } from "react";
+import { Button, Card, CardBody } from "@heroui/react";
+import { useNavigate } from "react-router-dom";
+
 import Globaltable from "@/components/organismos/table.tsx"; // Importar la tabla reutilizable
 import { TableColumn } from "@/components/organismos/table.tsx";
 import Buton from "@/components/molecules/Button";
 import Modall from "@/components/organismos/modal";
-import { useState } from "react";
 import { useUnidad } from "@/hooks/UnidadesMedida/useUnidad";
 import { FormUpdate } from "@/components/organismos/UnidadesMedida/FormUpdate";
 import { Unidad } from "@/types/Unidad";
-import { Button, Card, CardBody } from "@heroui/react";
-import { useNavigate } from "react-router-dom";
 import FormularioUnidades from "@/components/organismos/UnidadesMedida/FormRegister";
 
 export const UnidadTable = () => {
@@ -116,7 +117,7 @@ export const UnidadTable = () => {
               <h1 className="text-2xl font-bold">Gestionar Unidades</h1>
               <div className="flex gap-2">
                 <Button
-                  className="text-white bg-blue-700"
+                  className="text-white bg-primary"
                   onPress={handleGoToElemento}
                 >
                   Elementos
@@ -133,16 +134,16 @@ export const UnidadTable = () => {
         onOpenChange={handleClose}
       >
         <FormularioUnidades
-          id="unidad-form"
           addData={handleAddUnidad}
+          id="unidad-form"
           onClose={handleClose}
         />
         <div>
           <Buton
+            className="w-full p-2 rounded-xl"
+            form="unidad-form"
             text="Guardar"
             type="submit"
-            form="unidad-form"
-            className="w-full p-2 rounded-xl"
           />
         </div>
       </Modall>
@@ -154,23 +155,23 @@ export const UnidadTable = () => {
       >
         {selectedUnidad && (
           <FormUpdate
-            unidades={UnidadsWithKey ?? []}
-            unidadId={selectedUnidad.idUnidad as number}
             id="FormUpdate"
             onclose={handleCloseUpdate}
+            unidadId={selectedUnidad.idUnidad as number}
+            unidades={UnidadsWithKey ?? []}
           />
         )}
       </Modall>
 
       {UnidadsWithKey && (
         <Globaltable
-          data={UnidadsWithKey}
           columns={columns}
-          onEdit={handleEdit}
-          onDelete={(unidad) => handleState(unidad.idUnidad)}
+          data={UnidadsWithKey}
           extraHeaderContent={
             <Buton text="Nueva unidad" onPress={() => setIsOpen(true)} />
           }
+          onDelete={(unidad) => handleState(unidad.idUnidad)}
+          onEdit={handleEdit}
         />
       )}
     </div>

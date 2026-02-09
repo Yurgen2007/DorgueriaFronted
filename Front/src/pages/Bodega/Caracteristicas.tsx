@@ -1,9 +1,10 @@
-import Globaltable from "@/components/organismos/table.tsx"; // Importar la tabla reutilizable
-import { TableColumn } from "@/components/organismos/table.tsx";
-import Buton from "@/components/molecules/Button";
 import { useState } from "react";
 import { Card, CardBody } from "@heroui/react";
 import { useNavigate } from "react-router-dom";
+
+import Globaltable from "@/components/organismos/table.tsx"; // Importar la tabla reutilizable
+import { TableColumn } from "@/components/organismos/table.tsx";
+import Buton from "@/components/molecules/Button";
 import { useCaracteristica } from "@/hooks/Caracteristicas/useCaracteristicas";
 import { Caracteristica } from "@/types/Caracteristica";
 import Modall from "@/components/organismos/modal";
@@ -49,7 +50,6 @@ export const CaracteristicasTable = () => {
     setIsOpenUpdate(true);
   };
 
-
   const columns: TableColumn<Caracteristica>[] = [
     { key: "nombre", label: "Nombre" },
     {
@@ -59,10 +59,10 @@ export const CaracteristicasTable = () => {
         <span>
           {caracteristica.createdAt
             ? new Date(caracteristica.createdAt).toLocaleDateString("es-ES", {
-              year: "numeric",
-              month: "2-digit",
-              day: "2-digit",
-            })
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+              })
             : "N/A"}
         </span>
       ),
@@ -74,10 +74,10 @@ export const CaracteristicasTable = () => {
         <span>
           {caracteristica.updatedAt
             ? new Date(caracteristica.updatedAt).toLocaleDateString("es-ES", {
-              year: "numeric",
-              month: "2-digit",
-              day: "2-digit",
-            })
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+              })
             : "N/A"}
         </span>
       ),
@@ -123,15 +123,15 @@ export const CaracteristicasTable = () => {
         onOpenChange={handleClose}
       >
         <FormularioCaracteristicas
-          id="caracteristica-form"
           addData={handleAddCaracteristicas}
+          id="caracteristica-form"
           onClose={handleClose}
         />
         <Buton
+          className="w-full rounded-xl"
+          form="caracteristica-form"
           text="Guardar"
           type="submit"
-          form="caracteristica-form"
-          className="w-full rounded-xl"
         />
       </Modall>
 
@@ -142,10 +142,10 @@ export const CaracteristicasTable = () => {
       >
         {selectedCaracteristicas && (
           <FormUpdate
-            caracteristicas={CaracteristicassWithKey ?? []}
             caracteristicaId={
               selectedCaracteristicas.idCaracteristica as number
             }
+            caracteristicas={CaracteristicassWithKey ?? []}
             id="FormUpdate"
             onclose={handleCloseUpdate}
           />
@@ -154,15 +154,15 @@ export const CaracteristicasTable = () => {
 
       {CaracteristicassWithKey && (
         <Globaltable
-          data={CaracteristicassWithKey}
           columns={columns}
-          onEdit={handleEdit}
+          data={CaracteristicassWithKey}
           extraHeaderContent={
             <Buton
               text="Nueva caracteristica"
               onPress={() => setIsOpen(true)}
             />
           }
+          onEdit={handleEdit}
         />
       )}
     </div>

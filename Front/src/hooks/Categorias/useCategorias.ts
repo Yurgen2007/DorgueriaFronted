@@ -1,11 +1,12 @@
-import { Categoria, UpCategoria } from "@/types/Categorias";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { addToast } from "@heroui/react";
+
+import { Categoria, UpCategoria } from "@/types/Categorias";
 import { getCategorias } from "@/axios/Categorias/getCategorias";
 import { postCategorias } from "@/axios/Categorias/postCategorias";
 import { UpdCategoria } from "@/axios/Categorias/putCategorias";
 import { StateCategoria } from "@/axios/Categorias/putStateCategorias";
 import { deleteCategoriaReal } from "@/axios/Categorias/deleteCategoriaReal";
-import { addToast } from "@heroui/react";
 
 export function useCategoria() {
   const queryClient = useQueryClient();
@@ -29,7 +30,7 @@ export function useCategoria() {
 
   const getCategoriaById = (
     id: number,
-    categorias: Categoria[] | undefined = data
+    categorias: Categoria[] | undefined = data,
   ): Categoria | null => {
     return (
       categorias?.find((categoria) => categoria.idCategoria === id) || null
@@ -39,6 +40,7 @@ export function useCategoria() {
   const updateCategoriaMutation = useMutation({
     mutationFn: ({ id, data }: { id: number; data: UpCategoria }) => {
       const { idCategoria, ...resto } = data;
+
       return UpdCategoria(id, resto);
     },
     onSuccess: () => {

@@ -1,24 +1,24 @@
+import { useState } from "react";
+import { DocumentTextIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
+
+import { CodigoInventario } from "../../CodigoInventario";
+
 import Globaltable from "@/components/organismos/table.tsx"; // Importar la tabla reutilizable
 import { TableColumn } from "@/components/organismos/table.tsx";
 import Buton from "@/components/molecules/Button";
 import Modall from "@/components/organismos/modal";
-import { useState } from "react";
 import { useElemento } from "@/hooks/Elementos/useElemento";
 import { Elemento } from "@/types/Elemento";
 import { FormAgregateStock } from "@/components/organismos/Inventarios/FormAgregateStock";
 import { FormUpdate } from "@/components/organismos/Elementos/FormUpdate";
-import { CodigoInventario } from "../../CodigoInventario";
 import usePermissions from "@/hooks/Usuarios/usePermissions";
-import { DocumentTextIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
 
 interface InventariosTableProps {
   elementos?: Elemento[];
   idSitio?: number;
 }
 
-export const InventariosTable = ({
-  idSitio,
-}: InventariosTableProps) => {
+export const InventariosTable = ({ idSitio }: InventariosTableProps) => {
   const { userHasPermission } = usePermissions();
 
   const {
@@ -34,8 +34,7 @@ export const InventariosTable = ({
   const [selectedElementoStock, setSelectedElementoStock] =
     useState<Elemento | null>(null);
   const [isOpenCodigos, setIsOpenCodigos] = useState(false);
-  const [elementoCodigos, setElementoCodigos] =
-    useState<Elemento | null>(null);
+  const [elementoCodigos, setElementoCodigos] = useState<Elemento | null>(null);
 
   const handleCloseCodigos = () => {
     setIsOpenCodigos(false);
@@ -79,9 +78,9 @@ export const InventariosTable = ({
 
         return (
           <img
-            src={src}
             alt="Imagen del elemento"
             className="justify-center relative left-6 h-28 rounded shadow"
+            src={src}
           />
         );
       },
@@ -96,7 +95,7 @@ export const InventariosTable = ({
         let estado = "Sin stock";
 
         if (cantidad >= 50) {
-          color = "text-green-600 font-bold";
+          color = "text-primary font-bold";
           estado = "Suficiente";
         } else if (cantidad >= 16) {
           color = "text-yellow-500 font-semibold";
@@ -117,7 +116,9 @@ export const InventariosTable = ({
       key: "nombre", // Using an existing key to avoid TS error
       label: "Unidad",
       render: (elemento: Elemento) => {
-        const unidad = (elemento as any).fkUnidadMedida?.nombre ?? "No definido";
+        const unidad =
+          (elemento as any).fkUnidadMedida?.nombre ?? "No definido";
+
         return <span>{unidad}</span>;
       },
     },
@@ -126,6 +127,7 @@ export const InventariosTable = ({
       label: "Grupo",
       render: (elemento: Elemento) => {
         const grupo = (elemento as any).fkInventario?.nombre ?? "Sin grupo";
+
         return <span>{grupo}</span>;
       },
     },
@@ -136,10 +138,10 @@ export const InventariosTable = ({
         <span>
           {elemento.createdAt
             ? new Date(elemento.createdAt).toLocaleDateString("es-ES", {
-              year: "numeric",
-              month: "2-digit",
-              day: "2-digit",
-            })
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+              })
             : "N/A"}
         </span>
       ),
@@ -159,7 +161,7 @@ export const InventariosTable = ({
 
           {!!elemento.fkCaracteristica && (
             <Buton
-              className="w-[50px] h-[40px] p-0 min-w-0 bg-green-600 hover:bg-gray-700 text-white"
+              className="w-[50px] h-[40px] p-0 min-w-0 bg-primary hover:bg-gray-700 text-white"
               onPress={() => handleOpenCodigos(elemento)}
             >
               <DocumentTextIcon />
@@ -178,8 +180,8 @@ export const InventariosTable = ({
     return <span>Error: {error?.message}</span>;
   }
 
-  const filteredBySite = elementosHook?.filter(
-    (elemento) => (idSitio ? elemento.fkSitio?.idSitio === idSitio : true)
+  const filteredBySite = elementosHook?.filter((elemento) =>
+    idSitio ? elemento.fkSitio?.idSitio === idSitio : true,
   );
 
   const ElementosWithKey = filteredBySite?.map((elemento) => ({
@@ -216,8 +218,8 @@ export const InventariosTable = ({
             />
           ) : (
             <FormUpdate
-              elementos={elementosHook ?? []}
               elementoId={selectedElementoStock.idElemento!}
+              elementos={elementosHook ?? []}
               id="FormUpdate"
               onclose={handleCloseUpdate}
             />
@@ -232,8 +234,8 @@ export const InventariosTable = ({
         {elementoCodigos && (
           <CodigoInventario
             idElemento={elementoCodigos.idElemento!}
-            tieneCaracteristicas={!!elementoCodigos.fkCaracteristica}
             isOpen={isOpenCodigos}
+            tieneCaracteristicas={!!elementoCodigos.fkCaracteristica}
             onClose={handleCloseCodigos}
           />
         )}
@@ -241,8 +243,8 @@ export const InventariosTable = ({
 
       {userHasPermission(29) && ElementosWithKey && (
         <Globaltable
-          data={ElementosWithKey as any[]}
           columns={columns ?? []}
+          data={ElementosWithKey as any[]}
           onDelete={
             userHasPermission(31)
               ? (elemento) => handleState(elemento.idElemento)

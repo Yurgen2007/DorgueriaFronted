@@ -2,9 +2,10 @@ import { Form } from "@heroui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Input } from "@heroui/input";
+import { addToast } from "@heroui/react";
+
 import { sitioUpdate, sitioUpdateSchema } from "@/schemas/sitios";
 import { useSitios } from "@/hooks/sitios/useSitios";
-import { addToast } from "@heroui/react";
 import Buton from "@/components/molecules/Button";
 
 type Props = {
@@ -53,42 +54,42 @@ export const FormUpdate = ({ sitios, sitioId, id, onclose }: Props) => {
 
   return (
     <Form
-      id={id}
       className="w-full space-y-4"
+      id={id}
       onSubmit={handleSubmit(onSubmit)}
     >
       <Input
         label="Nombre del sitio"
-        type="text"
         placeholder="Nombre"
+        type="text"
         {...register("nombre")}
-        isInvalid={!!errors.nombre}
         errorMessage={errors.nombre?.message}
+        isInvalid={!!errors.nombre}
       />
 
       <Input
         label="Estante"
-        type="text"
         placeholder="Estante"
+        type="text"
         {...register("estante")}
-        isInvalid={!!errors.estante}
         errorMessage={errors.estante?.message}
+        isInvalid={!!errors.estante}
       />
 
       <Input
         label="Pasillo"
-        type="text"
         placeholder="Pasillo"
+        type="text"
         {...register("pasillo")}
-        isInvalid={!!errors.pasillo}
         errorMessage={errors.pasillo?.message}
+        isInvalid={!!errors.pasillo}
       />
 
       <Buton
+        className="w-full rounded-xl"
+        isLoading={isSubmitting}
         text="Guardar"
         type="submit"
-        isLoading={isSubmitting}
-        className="w-full rounded-xl"
       />
     </Form>
   );

@@ -1,15 +1,17 @@
 import { Form } from "@heroui/form";
 import { addToast, Input, Select, SelectItem } from "@heroui/react";
-import { useSitios } from "@/hooks/sitios/useSitios";
-import { useElemento } from "@/hooks/Elementos/useElemento";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { InventarioCreate, InventarioCreateSchema } from "@/schemas/Inventario";
 import { useState } from "react";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
-import Buton from "@/components/molecules/Button";
+
 import Modal from "../modal";
 import FormularioElementos from "../Elementos/FormRegister";
+
+import Buton from "@/components/molecules/Button";
+import { InventarioCreate, InventarioCreateSchema } from "@/schemas/Inventario";
+import { useElemento } from "@/hooks/Elementos/useElemento";
+import { useSitios } from "@/hooks/sitios/useSitios";
 type FormularioProps = {
   addData: (inventario: InventarioCreate) => Promise<void>;
   onClose: () => void;
@@ -66,13 +68,15 @@ export default function FormularioInventario({
       console.error("Error al guardar el elemento:", error);
     }
   };
+
   console.log("Errores", errors);
+
   return (
     <>
       <Form
+        className="w-full space-y-4"
         id={id}
         onSubmit={handleSubmit(onSubmit)}
-        className="w-full space-y-4"
       >
         <Controller
           control={control}
@@ -82,12 +86,12 @@ export default function FormularioInventario({
               label="Estado"
               placeholder="Selecciona estado"
               {...field}
-              value={field.value ? "true" : "false"}
-              onChange={(e) => field.onChange(e.target.value === "true")}
-              isInvalid={!!errors.estado}
-              errorMessage={errors.estado?.message}
               isDisabled
               defaultSelectedKeys={["true"]}
+              errorMessage={errors.estado?.message}
+              isInvalid={!!errors.estado}
+              value={field.value ? "true" : "false"}
+              onChange={(e) => field.onChange(e.target.value === "true")}
             >
               <SelectItem key="true">Activo</SelectItem>
               <SelectItem key="false">Inactivo</SelectItem>
@@ -98,8 +102,8 @@ export default function FormularioInventario({
         {!loadingSitios && !errorSitios && Array.isArray(sitios) && (
           <Controller
             control={control}
-            name="fkSitio"
             defaultValue={typeof idSitio === "number" ? idSitio : undefined}
+            name="fkSitio"
             render={({ field }) => {
               const sitioActual = sitios.find((s) => s.idSitio === idSitio);
 
@@ -107,24 +111,25 @@ export default function FormularioInventario({
                 <div className="w-full">
                   {idSitio && sitioActual ? (
                     <Input
+                      isDisabled
+                      isReadOnly
+                      className="w-full"
                       label="Sitio"
                       value={sitioActual.nombre}
-                      isReadOnly
-                      isDisabled
-                      className="w-full"
                     />
                   ) : (
                     <Select
+                      className="w-full"
+                      errorMessage={errors.fkSitio?.message}
+                      isInvalid={!!errors.fkSitio}
                       label="Sitio"
                       placeholder="Selecciona un sitio"
-                      className="w-full"
                       selectedKeys={field.value ? [String(field.value)] : []}
                       onChange={(e) => {
                         const sitioId = Number(e.target.value);
+
                         field.onChange(sitioId);
                       }}
-                      isInvalid={!!errors.fkSitio}
-                      errorMessage={errors.fkSitio?.message}
                     >
                       {sitios
                         .filter((i) => i.estado === true)
@@ -152,17 +157,18 @@ export default function FormularioInventario({
               <div className="w-full flex">
                 <Select
                   {...field}
-                  label="Elemento"
-                  placeholder="Selecciona un elemento"
                   aria-label="Seleccionar elemento"
                   className="w-full"
+                  errorMessage={errors.fkElemento?.message}
+                  isInvalid={!!errors.fkElemento}
+                  label="Elemento"
+                  placeholder="Selecciona un elemento"
                   selectedKeys={field.value ? [field.value.toString()] : []}
                   onChange={(e) => {
                     const elementoId = Number(e.target.value);
+
                     field.onChange(elementoId);
                   }}
-                  isInvalid={!!errors.fkElemento}
-                  errorMessage={errors.fkElemento?.message}
                 >
                   {elementos.length ? (
                     elementos
@@ -182,8 +188,8 @@ export default function FormularioInventario({
                   )}
                 </Select>
                 <Buton
-                  type="button"
                   className="m-2 w-10 h-10 !px-0 !min-w-0 rounded-xl"
+                  type="button"
                   onPress={() => setShowModalElemento(true)}
                 >
                   <PlusCircleIcon />
@@ -199,11 +205,11 @@ export default function FormularioInventario({
         onOpenChange={handleCloseElemento}
       >
         <FormularioElementos
-          id="user"
-          onClose={() => setShowModalElemento(false)}
           addData={async (data) => {
             return await addElemento(data);
           }}
+          id="user"
+          onClose={() => setShowModalElemento(false)}
         />
         <Buton form="user" text="Guardar" type="submit" />
       </Modal>

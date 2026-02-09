@@ -3,21 +3,33 @@ import { Input } from "@heroui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { addToast } from "@heroui/react";
+
 import Buton from "@/components/molecules/Button";
-import { CaracteristicaUpdate, CaracteristicaUpdateSchema } from "@/schemas/Caracteristica";
+import {
+  CaracteristicaUpdate,
+  CaracteristicaUpdateSchema,
+} from "@/schemas/Caracteristica";
 import { useCaracteristica } from "@/hooks/Caracteristicas/useCaracteristicas";
 
 type Props = {
-  caracteristicas: (CaracteristicaUpdate)[];
+  caracteristicas: CaracteristicaUpdate[];
   caracteristicaId: number;
   id: string;
   onclose: () => void;
 };
 
-export const FormUpdate = ({ caracteristicas, caracteristicaId, id, onclose }: Props) => {
+export const FormUpdate = ({
+  caracteristicas,
+  caracteristicaId,
+  id,
+  onclose,
+}: Props) => {
   const { updateCaracteristica, getCaracteristicaById } = useCaracteristica();
 
-  const foundCaracteristica = getCaracteristicaById(caracteristicaId, caracteristicas) as CaracteristicaUpdate;
+  const foundCaracteristica = getCaracteristicaById(
+    caracteristicaId,
+    caracteristicas,
+  ) as CaracteristicaUpdate;
 
   const {
     register,
@@ -54,23 +66,23 @@ export const FormUpdate = ({ caracteristicas, caracteristicaId, id, onclose }: P
 
   return (
     <Form
-      id={id}
       className="w-full space-y-4"
+      id={id}
       onSubmit={handleSubmit(onSubmit)}
     >
       <Input
         label="Nombre"
         placeholder="Nombre...."
         {...register("nombre")}
-        isInvalid={!!errors.nombre}
         errorMessage={errors.nombre?.message}
+        isInvalid={!!errors.nombre}
       />
 
       <Buton
+        className="w-full rounded-xl"
+        isLoading={isSubmitting}
         text="Guardar"
         type="submit"
-        isLoading={isSubmitting}
-        className="w-full rounded-xl"
       />
     </Form>
   );

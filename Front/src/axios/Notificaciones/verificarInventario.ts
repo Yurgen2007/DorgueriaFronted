@@ -1,5 +1,11 @@
-import {axiosAPI} from "@/axios/axiosAPI";
+import axiosAPI from "../axiosAPI";
 
-export async function verificarInventario(idUsuario: number) {
-  return await axiosAPI.get(`/notificaciones/verificar-inventario/${idUsuario}`);
-}
+export const verificarInventario = async (idUsuario: number) => {
+  try {
+    const response = await axiosAPI.get(`/notificaciones/verificar-inventario/${idUsuario}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error al verificar inventario:', error);
+    throw error;
+  }
+};

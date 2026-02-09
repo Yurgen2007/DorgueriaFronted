@@ -10,7 +10,7 @@ import {
   HomeIcon,
   TagIcon,
   UserIcon,
-  TruckIcon
+  TruckIcon,
 } from "@heroicons/react/24/outline";
 
 const iconsConfig: Record<string, React.ElementType> = {
@@ -25,7 +25,7 @@ const iconsConfig: Record<string, React.ElementType> = {
   EnvelopeIcon,
   CubeIcon,
   HomeIcon,
-  TruckIcon
+  TruckIcon,
 };
 
 export default iconsConfig;

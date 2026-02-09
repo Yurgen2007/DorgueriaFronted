@@ -12,8 +12,11 @@ export const TipoUpdateSchema = z.object({
 export type TipoUpdate = z.infer<typeof TipoUpdateSchema>;
 
 export const TipoCreateSchema = z.object({
-    nombre:z.string().min(1, {message:"Nombre es  requerido"}).min(2,{message:"Debe contener como mimimo 2 caracteres"}),
+  nombre: z
+    .string()
+    .min(1, { message: "Nombre es  requerido" })
+    .min(2, { message: "Debe contener como mimimo 2 caracteres" }),
 
-    estado:z.boolean({required_error:"Estado es requerido"}),
-})
-export type TipoCreate = z.infer<typeof TipoCreateSchema>
+  estado: z.boolean({ required_error: "Estado es requerido" }),
+});
+export type TipoCreate = z.infer<typeof TipoCreateSchema>;

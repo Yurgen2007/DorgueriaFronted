@@ -7,7 +7,6 @@ export const UnidadUpdateSchema = z.object({
     .string()
     .min(1, { message: "Nombre es  requerido" })
     .min(2, { message: "Debe contener como mimimo 2 caracteres" }),
-
 });
 
 export type UnidadUpdate = z.infer<typeof UnidadUpdateSchema>;

@@ -1,8 +1,9 @@
-import Buton from "@/components/molecules/Button";
-import { useInventario } from "@/hooks/Inventarios/useInventario";
 import { addToast, Input } from "@heroui/react";
 import { useState } from "react";
 import { AxiosError } from "axios";
+
+import { useInventario } from "@/hooks/Inventarios/useInventario";
+import Buton from "@/components/molecules/Button";
 
 type Props = {
   fkInventario?: number;
@@ -48,7 +49,7 @@ export const FormAgregateStock = ({
             title: "Código duplicado",
             description: msg,
             color: "danger",
-          })
+          }),
         );
       } else if (typeof backendMessage === "string") {
         addToast({
@@ -86,9 +87,9 @@ export const FormAgregateStock = ({
         ))}
       </ul>
       <Buton
+        disabled={codigos.length === 0 || estado === false}
         text="Guardar y actualizar stock"
         onPress={guardar}
-        disabled={codigos.length === 0 || estado === false}
       />
     </div>
   );

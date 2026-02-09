@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 import { useCodigoInventario } from "@/hooks/CodigoInventario/useCodigoInventario";
 import { CodigoInventarioUpdate } from "@/schemas/CodigoInventario";
 import Modall from "@/components/organismos/modal";
@@ -20,15 +21,19 @@ export const CodigoInventario = ({
   const { codigos: codigosAll, getCodigosPorElemento } = useCodigoInventario();
   const [codigos, setCodigos] = useState<CodigoInventarioUpdate[]>([]);
   const [isLoadingCo, setIsLoading] = useState(true);
-  const [codigoIdSeleccionado, setCodigoIdSeleccionado] = useState<number | null>(null);
+  const [codigoIdSeleccionado, setCodigoIdSeleccionado] = useState<
+    number | null
+  >(null);
   const [modalAbierto, setModalAbierto] = useState(false);
 
   const cargarCodigos = async () => {
     setIsLoading(true);
     try {
-      const disponibles = getCodigosPorElemento(idElemento, codigosAll ?? []).filter(
-        (c) => !c.uso
-      );
+      const disponibles = getCodigosPorElemento(
+        idElemento,
+        codigosAll ?? [],
+      ).filter((c) => !c.uso);
+
       setCodigos(disponibles);
     } catch (error) {
       console.error("Error al cargar códigos:", error);
@@ -75,8 +80,8 @@ export const CodigoInventario = ({
             >
               <span>{codigo.codigo}</span>
               <Buton
-                text="Editar"
                 className="text-sm px-3 py-1 rounded-xl"
+                text="Editar"
                 onPress={() => handleAbrirEdicion(codigo.idCodigoInventario!)}
               />
             </li>
@@ -91,8 +96,8 @@ export const CodigoInventario = ({
       >
         {codigoIdSeleccionado !== null && (
           <FormUpdate
-            codigos={codigos}
             codigoId={codigoIdSeleccionado}
+            codigos={codigos}
             id="editar-codigo"
             onClose={handleCerrarModal}
           />

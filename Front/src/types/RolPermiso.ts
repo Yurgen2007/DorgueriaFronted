@@ -11,12 +11,12 @@ export type RolPermiso = {
     idRol: number;
     nombre: string;
   };
-}
+};
 export type RolPermisoPost = {
   idRolPermiso?: number;
   estado: boolean;
   createdAt?: string;
   updatedAt?: string;
-  fkPermiso:number
-  fkRol:number
-}
+  fkPermiso: number;
+  fkRol: number;
+};

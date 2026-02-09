@@ -1,3 +1,6 @@
+import { addToast } from "@heroui/react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
 import {
   AgregateStockData,
   agregateStock,
@@ -5,11 +8,12 @@ import {
 import { deleteInventario } from "@/axios/Inventarios/deleteInventario";
 import { deleteInventarioReal } from "@/axios/Inventarios/deleteInventarioReal";
 import { getInventario } from "@/axios/Inventarios/getInventario";
-import { postInventario, InventarioPostData } from "@/axios/Inventarios/postInventario";
+import {
+  postInventario,
+  InventarioPostData,
+} from "@/axios/Inventarios/postInventario";
 import { putInventario } from "@/axios/Inventarios/putInventario";
 import { Inventario, InventarioConSitio } from "@/types/Inventario";
-import { addToast } from "@heroui/react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export function useInventario() {
   const queryClient = useQueryClient();
@@ -20,7 +24,7 @@ export function useInventario() {
     staleTime: 0,
     gcTime: 1000 * 60 * 10,
     refetchOnWindowFocus: true,
-    refetchOnMount: true
+    refetchOnMount: true,
   });
 
   const addInventarioMutation = useMutation({
@@ -51,7 +55,7 @@ export function useInventario() {
 
   const getInventarioById = (
     id: number,
-    inventarios: Inventario[] | undefined = data
+    inventarios: Inventario[] | undefined = data,
   ): Inventario | null => {
     return (
       inventarios?.find((inventario) => inventario.idInventario === id) || null
@@ -60,7 +64,15 @@ export function useInventario() {
 
   const updateInventarioMutation = useMutation({
     mutationFn: ({ id, data }: { id: number; data: Inventario }) => {
-      const { idInventario, acciones, imagenElemento, unidad, tieneCaracteristicas, ...resto } = data;
+      const {
+        idInventario,
+        acciones,
+        imagenElemento,
+        unidad,
+        tieneCaracteristicas,
+        ...resto
+      } = data;
+
       return putInventario(id, resto as any);
     },
     onSuccess: () => {

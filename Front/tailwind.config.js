@@ -10,7 +10,14 @@ export default {
     "./node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: '#38A169',
+        primaryLight: '#48BB78',
+        darkTeal: '#234E52',
+        tealSoft: '#E6FFFA',
+      },
+    },
   },
   darkMode: "class",
   plugins: [heroui()],

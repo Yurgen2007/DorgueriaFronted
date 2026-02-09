@@ -1,10 +1,11 @@
-import { postElemento } from "@/axios/Elementos/postElemento";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { addToast } from "@heroui/react";
+
+import { postElemento } from "@/axios/Elementos/postElemento";
 import { Elemento, postElementos, putElementos } from "@/types/Elemento";
 import { putElemento } from "@/axios/Elementos/putElemento";
 import { deleteElemento } from "@/axios/Elementos/deleteElemento";
 import { getElemento } from "@/axios/Elementos/getElemento";
-import { addToast } from "@heroui/react";
 import { axiosAPI } from "@/axios/axiosAPI";
 
 export function useElemento() {
@@ -13,10 +14,10 @@ export function useElemento() {
   const { data, isLoading, isError, error } = useQuery<Elemento[]>({
     queryKey: ["elementos"],
     queryFn: getElemento,
-    staleTime:0,
+    staleTime: 0,
     gcTime: 1000 * 60 * 10,
     refetchOnWindowFocus: true,
-    refetchOnMount:true
+    refetchOnMount: true,
   });
 
   const addElementoMutation = useMutation({
@@ -33,7 +34,7 @@ export function useElemento() {
 
   const getElementoById = (
     id: number,
-    elementos: Elemento[] | undefined = data
+    elementos: Elemento[] | undefined = data,
   ): Elemento | null => {
     return elementos?.find((elemento) => elemento.idElemento === id) || null;
   };

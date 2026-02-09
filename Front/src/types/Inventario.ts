@@ -1,8 +1,7 @@
 export type CodigoInventario = {
-  fkMovimiento: number
   idCodigoInventario: number;
   codigo: string;
-  uso: boolean
+  uso: boolean;
 };
 
 export type Inventario = {

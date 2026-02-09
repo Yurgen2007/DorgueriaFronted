@@ -2,6 +2,7 @@ import { Form } from "@heroui/form";
 import { addToast, Input, Select, SelectItem } from "@heroui/react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+
 import { UnidadCreate, UnidadCreateSchema } from "@/schemas/Unidad";
 
 type FormularioProps = {
@@ -10,7 +11,11 @@ type FormularioProps = {
   id: string;
 };
 
-export default function FormularioUnidades({ addData, onClose, id }: FormularioProps) {
+export default function FormularioUnidades({
+  addData,
+  onClose,
+  id,
+}: FormularioProps) {
   const {
     control,
     register,
@@ -19,9 +24,9 @@ export default function FormularioUnidades({ addData, onClose, id }: FormularioP
   } = useForm<UnidadCreate>({
     resolver: zodResolver(UnidadCreateSchema),
     mode: "onChange",
-    defaultValues:{
-      estado:true
-    }
+    defaultValues: {
+      estado: true,
+    },
   });
 
   const onSubmit = async (data: UnidadCreate) => {
@@ -39,20 +44,22 @@ export default function FormularioUnidades({ addData, onClose, id }: FormularioP
       console.error("Error al guardar:", error);
     }
   };
+
   console.log("Errores", errors);
+
   return (
     <Form
+      className="w-full space-y-4"
       id={id}
       onSubmit={handleSubmit(onSubmit)}
-      className="w-full space-y-4"
     >
       <Input
         label="Nombre"
         placeholder="Nombre"
         type="text"
         {...register("nombre")}
-        isInvalid={!!errors.nombre}
         errorMessage={errors.nombre?.message}
+        isInvalid={!!errors.nombre}
       />
       <Controller
         control={control}
@@ -62,12 +69,12 @@ export default function FormularioUnidades({ addData, onClose, id }: FormularioP
             label="Estado"
             placeholder="Seleccione un estado"
             {...field}
-            value={field.value ? "true" : "false"}
-            onChange={(e) => field.onChange(e.target.value === "true")}
-            isInvalid={!!errors.estado}
-            errorMessage={errors.estado?.message}
             isDisabled
             defaultSelectedKeys={["true"]}
+            errorMessage={errors.estado?.message}
+            isInvalid={!!errors.estado}
+            value={field.value ? "true" : "false"}
+            onChange={(e) => field.onChange(e.target.value === "true")}
           >
             <SelectItem key="true">Activo</SelectItem>
             <SelectItem key="false">Inactivo</SelectItem>

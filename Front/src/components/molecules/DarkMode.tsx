@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Switch } from "@heroui/switch";
+
 import { MoonIcon, SunIcon } from "../atoms/Icons";
 
 export function DarkMode() {
@@ -7,6 +8,7 @@ export function DarkMode() {
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
+
     if (savedTheme === "dark") {
       setIsDark(true);
       document.documentElement.classList.add("dark");
@@ -24,14 +26,12 @@ export function DarkMode() {
   }, [isDark]);
 
   return (
-<Switch
-      isSelected={isDark}
-      onValueChange={setIsDark}
+    <Switch
       color="primary"
+      isSelected={isDark}
       size="lg"
-      thumbIcon={({isSelected}) =>
-        isSelected ? <MoonIcon /> : <SunIcon  />
-      }
+      thumbIcon={({ isSelected }) => (isSelected ? <MoonIcon /> : <SunIcon />)}
+      onValueChange={setIsDark}
     />
   );
 }

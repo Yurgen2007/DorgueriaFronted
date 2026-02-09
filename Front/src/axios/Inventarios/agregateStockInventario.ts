@@ -9,9 +9,7 @@ export type AgregateStockData = {
 
 export async function agregateStock(data: AgregateStockData): Promise<any> {
   const { idInventario, ...resto } = data;
-  const res = await axiosAPI.post(
-    `/inventarios/agregateStock`,
-    resto
-  );
+  const res = await axiosAPI.post(`/inventarios/agregateStock`, resto);
+
   return res.data;
 }

@@ -1,3 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+	--color-primary: #38A169;
+	--color-primary-light: #48BB78;
+	--color-dark-teal: #234E52;
+	--color-teal-soft: #E6FFFA;
+}
+
+/* Utility classes mapping CSS variables for easy use in non-tailwind places */
+.brand-bg { background-color: var(--color-primary); }
+.brand-bg-soft { background-color: var(--color-teal-soft); }
+.brand-text { color: var(--color-primary); }
+.brand-accent { color: var(--color-primary-light); }

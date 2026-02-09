@@ -2,10 +2,11 @@ import { Input } from "@heroui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { addToast } from "@heroui/react";
+import { AxiosError } from "axios";
+
 import Buton from "@/components/molecules/Button";
 import { useInventario } from "@/hooks/Inventarios/useInventario";
 import { InventarioUpdate, InventarioUpdateSchema } from "@/schemas/Inventario";
-import { AxiosError } from "axios";
 
 type FormuProps = {
   inventarios: InventarioUpdate[];
@@ -24,7 +25,7 @@ export const FormUpdate = ({
 
   const foundInventario = getInventarioById(
     inventarioId,
-    inventarios
+    inventarios,
   ) as InventarioUpdate;
 
   if (!foundInventario) {
@@ -76,24 +77,25 @@ export const FormUpdate = ({
   };
 
   console.log("Errores", errors);
+
   return (
     <form
-      id={id}
       className="w-full space-y-4"
+      id={id}
       onSubmit={handleSubmit(onSubmit)}
     >
       <Input
         label="Cantidad"
         placeholder="Ingrese la cantidad ..."
         {...register("stock", { valueAsNumber: true })}
-        isInvalid={!!errors.stock}
         errorMessage={errors.stock?.message}
+        isInvalid={!!errors.stock}
       />
       <Buton
+        className="w-full rounded-xl"
+        isLoading={isSubmitting}
         text="Guardar"
         type="submit"
-        isLoading={isSubmitting}
-        className="w-full rounded-xl"
       />
     </form>
   );

@@ -6,4 +6,3 @@ export type Rol = {
   updatedAt?: string;
   asignarPermisos?: string;
 };
-

@@ -1,11 +1,12 @@
+import { addToast } from "@heroui/react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
 import { deleteSitio } from "@/axios/Sitios/deleteSitio";
 import { deleteSitioReal } from "@/axios/Sitios/deleteSitioReal";
 import { getSitio } from "@/axios/Sitios/getSitio";
 import { postSitio } from "@/axios/Sitios/postSitio";
 import { putSitio } from "@/axios/Sitios/putSitio";
 import { ListarSitios, Sitios } from "@/types/sitios";
-import { addToast } from "@heroui/react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export function useSitios() {
   const queryClient = useQueryClient();
@@ -32,7 +33,7 @@ export function useSitios() {
 
   const getSitioById = (
     id: number,
-    sitios: ListarSitios[] | undefined = data
+    sitios: ListarSitios[] | undefined = data,
   ): ListarSitios | null => {
     return sitios?.find((sitio) => sitio.idSitio === id) || null;
   };
@@ -40,6 +41,7 @@ export function useSitios() {
   const updateSitioMutation = useMutation({
     mutationFn: ({ id, data }: { id: number; data: Sitios }) => {
       const { idSitio, ...resto } = data;
+
       return putSitio(id, resto);
     },
     onSuccess: () => {

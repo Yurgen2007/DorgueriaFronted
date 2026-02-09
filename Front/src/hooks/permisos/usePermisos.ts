@@ -1,12 +1,12 @@
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
 import { getPermiso } from "@/axios/Permisos/getPermiso";
 import { postPermiso } from "@/axios/Permisos/postPermiso";
 import { putPermiso } from "@/axios/Permisos/putPermiso";
 import { Permisos } from "@/types/permisos";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export function usePermisos() {
   const queryClient = useQueryClient();
-
 
   const { data, isLoading, isError, error } = useQuery<Permisos[]>({
     queryKey: ["permisos"],
@@ -30,13 +30,14 @@ export function usePermisos() {
 
   const getPermisosById = (
     id: number,
-    permisos: Permisos[] | undefined = data
+    permisos: Permisos[] | undefined = data,
   ): Permisos | null => {
     return permisos?.find((permiso) => permiso.idPermiso === id) || null;
   };
 
   const updatePermisoMutation = useMutation({
-    mutationFn:({id, data}:{id:number, data:Permisos}) => putPermiso(id, data),
+    mutationFn: ({ id, data }: { id: number; data: Permisos }) =>
+      putPermiso(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["permisos"],

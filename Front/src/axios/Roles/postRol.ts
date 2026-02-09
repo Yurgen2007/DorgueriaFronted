@@ -9,5 +9,6 @@ export interface RolPostData {
 export async function postRol(data: RolPostData): Promise<any> {
   const { idRol, ...resto } = data;
   const res = await axiosAPI.post("roles", resto);
+
   return res.data;
 }

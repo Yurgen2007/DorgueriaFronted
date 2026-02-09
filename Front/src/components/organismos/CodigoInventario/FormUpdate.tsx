@@ -2,6 +2,7 @@ import { Form } from "@heroui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Input, addToast } from "@heroui/react";
+
 import Buton from "@/components/molecules/Button";
 import { useCodigoInventario } from "@/hooks/CodigoInventario/useCodigoInventario";
 import {
@@ -20,7 +21,10 @@ export const FormUpdate = ({ codigos, codigoId, id, onClose }: Props) => {
   const { updateCodigoInventario, getCodigoInventarioById } =
     useCodigoInventario();
 
-  const foundCodigo = getCodigoInventarioById(codigoId, codigos) as CodigoInventarioUpdate;
+  const foundCodigo = getCodigoInventarioById(
+    codigoId,
+    codigos,
+  ) as CodigoInventarioUpdate;
 
   console.log("foundCodigo:", foundCodigo);
   const {
@@ -53,19 +57,23 @@ export const FormUpdate = ({ codigos, codigoId, id, onClose }: Props) => {
   };
 
   return (
-    <Form id={id} className="w-full space-y-4" onSubmit={handleSubmit(onSubmit)}>
+    <Form
+      className="w-full space-y-4"
+      id={id}
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <Input
         label="Código"
         placeholder="Nuevo código"
         {...register("codigo")}
-        isInvalid={!!errors.codigo}
         errorMessage={errors.codigo?.message}
+        isInvalid={!!errors.codigo}
       />
       <Buton
+        className="w-full rounded-xl"
+        isLoading={isSubmitting}
         text="Guardar"
         type="submit"
-        isLoading={isSubmitting}
-        className="w-full rounded-xl"
       />
     </Form>
   );

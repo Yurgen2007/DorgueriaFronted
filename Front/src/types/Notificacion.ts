@@ -8,7 +8,6 @@ export type Notificacion = {
   requiereAccion: boolean;
   estado: NotificacionEstado;
   data: {
-    idMovimiento?: number;
     idElemento?: number;
     [key: string]: any;
   } | null;
@@ -16,6 +15,5 @@ export type Notificacion = {
   fkUsuario: {
     idUsuario: number;
     nombre: string;
-
+  };
 };
-}

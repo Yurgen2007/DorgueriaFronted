@@ -1,6 +1,6 @@
-import { ReactNode } from 'react';
-import { HeroUIProvider } from '@heroui/react';
-import { ToastProvider } from '@heroui/toast';
+import { ReactNode } from "react";
+import { HeroUIProvider } from "@heroui/react";
+import { ToastProvider } from "@heroui/toast";
 
 interface ProvidersProps {
   children: ReactNode;

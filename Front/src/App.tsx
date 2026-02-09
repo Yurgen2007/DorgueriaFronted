@@ -1,4 +1,5 @@
 import { Route, Routes } from "react-router-dom";
+
 import Layout from "./layouts/layout";
 import Home from "./pages/Home/Home";
 import { InventarioSitio } from "./pages/Bodega/Inventario/Sitios/InventarioSitio";
@@ -21,33 +22,33 @@ function App() {
   return (
     <Routes>
       <Route element={<ProtectedRoute />}>
-        <Route path="/" element={<Layout />}>
+        <Route element={<Layout />} path="/">
           <Route index element={<Home />} />
-          <Route path="perfil" element={<Perfil />} />
-          <Route path="admin/usuarios" element={<UsersTable />} />
-          <Route path="admin/roles" element={<RolTable />} />
-          <Route path="admin/acceso" element={<AccesoPage />} />
-          <Route path="admin/sitios" element={<SitiosTable />} />
-          <Route path="bodega/elementos" element={<ElementosTable />} />
-          <Route path="bodega/unidades" element={<UnidadTable />} />
-          <Route path="bodega/categorias" element={<CategoriasTable />} />
+          <Route element={<Perfil />} path="perfil" />
+          <Route element={<UsersTable />} path="admin/usuarios" />
+          <Route element={<RolTable />} path="admin/roles" />
+          <Route element={<AccesoPage />} path="admin/acceso" />
+          <Route element={<SitiosTable />} path="admin/sitios" />
+          <Route element={<ElementosTable />} path="bodega/elementos" />
+          <Route element={<UnidadTable />} path="bodega/unidades" />
+          <Route element={<CategoriasTable />} path="bodega/categorias" />
           <Route
-            path="bodega/caracteristicas"
             element={<CaracteristicasTable />}
+            path="bodega/caracteristicas"
           />
 
-          <Route path="bodega/inventario/" element={<Inventario />} />
+          <Route element={<Inventario />} path="bodega/inventario/" />
           <Route
-            path="bodega/inventario/areas/:id/sitios/:sitioId"
             element={<InventarioSitio />}
+            path="bodega/inventario/areas/:id/sitios/:sitioId"
           />
         </Route>
       </Route>
 
-      <Route path="/login" element={<Login />} />
-      <Route path="/forgotPass" element={<ForgotPassword />} />
-      <Route path="/reset-password" element={<ResetPassword />} />
-      <Route path="/perfil" element={<Perfil />} />
+      <Route element={<Login />} path="/login" />
+      <Route element={<ForgotPassword />} path="/forgotPass" />
+      <Route element={<ResetPassword />} path="/reset-password" />
+      <Route element={<Perfil />} path="/perfil" />
     </Routes>
   );
 }

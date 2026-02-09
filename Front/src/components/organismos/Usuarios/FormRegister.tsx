@@ -2,14 +2,16 @@ import { Input } from "@heroui/input";
 import { addToast, Select, SelectItem } from "@heroui/react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { UserSchema, User } from "@/schemas/User";
 import { Form } from "@heroui/form";
-import { useRol } from "@/hooks/Roles/useRol";
-import Buton from "@/components/molecules/Button";
-import {  useState } from "react";
+import { useState } from "react";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
+
 import FormularioRoles from "../Roles/FormRegister";
 import Modal from "../modal";
+
+import Buton from "@/components/molecules/Button";
+import { useRol } from "@/hooks/Roles/useRol";
+import { UserSchema, User } from "@/schemas/User";
 
 type FormularioProps = {
   addData: (user: User) => Promise<void>;
@@ -61,57 +63,57 @@ export default function FormularioU({ addData, onClose, id }: FormularioProps) {
   return (
     <>
       <Form
+        className="w-full space-y-4"
         id={id}
         onSubmit={handleSubmit(onSubmit)}
-        className="w-full space-y-4"
       >
         <Input
           label="Documento"
-          type="text"
           placeholder="Documento"
+          type="text"
           {...register("documento", { valueAsNumber: true })}
-          isInvalid={!!errors.documento}
           errorMessage={errors.documento?.message}
+          isInvalid={!!errors.documento}
         />
         <Input
           label="Nombre"
-          type="text"
           placeholder="Nombre"
+          type="text"
           {...register("nombre")}
-          isInvalid={!!errors.nombre}
           errorMessage={errors.nombre?.message}
+          isInvalid={!!errors.nombre}
         />
         <Input
           label="Apellido"
-          type="text"
           placeholder="Apellido"
+          type="text"
           {...register("apellido")}
-          isInvalid={!!errors.apellido}
           errorMessage={errors.apellido?.message}
+          isInvalid={!!errors.apellido}
         />
         <Input
           label="Edad"
-          type="text"
           placeholder="Edad"
+          type="text"
           {...register("edad", { valueAsNumber: true })}
-          isInvalid={!!errors.edad}
           errorMessage={errors.edad?.message}
+          isInvalid={!!errors.edad}
         />
         <Input
           label="Teléfono"
-          type="text"
           placeholder="Teléfono"
+          type="text"
           {...register("telefono")}
-          isInvalid={!!errors.telefono}
           errorMessage={errors.telefono?.message}
+          isInvalid={!!errors.telefono}
         />
         <Input
           label="Correo"
-          type="email"
           placeholder="Correo"
+          type="email"
           {...register("correo")}
-          isInvalid={!!errors.correo}
           errorMessage={errors.correo?.message}
+          isInvalid={!!errors.correo}
         />
 
         <Controller
@@ -122,12 +124,12 @@ export default function FormularioU({ addData, onClose, id }: FormularioProps) {
               label="Estado"
               placeholder="Selecciona estado"
               {...field}
-              value={field.value ? "true" : "false"}
-              onChange={(e) => field.onChange(e.target.value === "true")}
-              isInvalid={!!errors.estado}
-              errorMessage={errors.estado?.message}
               isDisabled
               defaultSelectedKeys={["true"]}
+              errorMessage={errors.estado?.message}
+              isInvalid={!!errors.estado}
+              value={field.value ? "true" : "false"}
+              onChange={(e) => field.onChange(e.target.value === "true")}
             >
               <SelectItem key="true">Activo</SelectItem>
               <SelectItem key="false">Inactivo</SelectItem>
@@ -140,20 +142,20 @@ export default function FormularioU({ addData, onClose, id }: FormularioProps) {
         )}
         <Input
           label="Cargo"
-          type="text"
           placeholder="Cargo"
+          type="text"
           {...register("cargo")}
-          isInvalid={!!errors.cargo}
           errorMessage={errors.cargo?.message}
+          isInvalid={!!errors.cargo}
         />
         <Input
           label="Contraseña"
-          type="password"
           placeholder="Password"
+          type="password"
           {...register("password")}
           autoComplete="off"
-          isInvalid={!!errors.password}
           errorMessage={errors.password?.message}
+          isInvalid={!!errors.password}
         />
 
         {!loadinRoles && !errorRoles && roles && (
@@ -163,12 +165,12 @@ export default function FormularioU({ addData, onClose, id }: FormularioProps) {
             render={({ field }) => (
               <div className="w-full flex">
                 <Select
+                  errorMessage={errors.fkRol?.message}
+                  isInvalid={!!errors.fkRol}
                   label="Rol"
+                  placeholder="Selecciona un rol..."
                   value={field.value ?? 0}
                   onChange={(e) => field.onChange(Number(e.target.value))}
-                  placeholder="Selecciona un rol..."
-                  isInvalid={!!errors.fkRol}
-                  errorMessage={errors.fkRol?.message}
                 >
                   {roles?.length ? (
                     roles
@@ -183,8 +185,8 @@ export default function FormularioU({ addData, onClose, id }: FormularioProps) {
                   )}
                 </Select>
                 <Buton
-                  type="button"
                   className="m-2 w-10 h-10 !px-0 !min-w-0 rounded-xl"
+                  type="button"
                   onPress={() => setShowModalRol(true)}
                 >
                   <PlusCircleIcon />
@@ -200,11 +202,11 @@ export default function FormularioU({ addData, onClose, id }: FormularioProps) {
         onOpenChange={handleClose}
       >
         <FormularioRoles
-          id="rol"
-          onClose={() => setShowModalRol(false)}
           addData={async (data) => {
             await addRol(data);
           }}
+          id="rol"
+          onClose={() => setShowModalRol(false)}
         />
         <Buton form="rol" text="Guardar" type="submit" />
       </Modal>

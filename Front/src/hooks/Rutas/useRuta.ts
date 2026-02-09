@@ -1,5 +1,6 @@
-import { Ruta, UpRuta } from "@/types/Ruta";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
+import { Ruta, UpRuta } from "@/types/Ruta";
 import { getRuta } from "@/axios/Rutas/getRuta";
 import { postRuta } from "@/axios/Rutas/postRuta";
 import { putRuta } from "@/axios/Rutas/putRuta";
@@ -29,7 +30,7 @@ export function useRuta() {
 
   const getRutaById = (
     id: number,
-    ruta: Ruta[] | undefined = data
+    ruta: Ruta[] | undefined = data,
   ): Ruta | null => {
     return ruta?.find((rutas) => rutas.idRuta === id) || null;
   };

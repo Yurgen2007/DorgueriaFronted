@@ -3,6 +3,7 @@ import { axiosAPI } from "../axiosAPI";
 export interface ElementoPostData {
   nombre: string;
   descripcion: string;
+  codigoBarras?: string;
   perecedero?: boolean;
   noPerecedero?: boolean;
   estado?: boolean;
@@ -18,6 +19,7 @@ export interface ElementoPostData {
 
 export async function postElemento(data: ElementoPostData): Promise<any> {
   const formData = new FormData();
+
   formData.append("nombre", data.nombre);
   formData.append("descripcion", data.descripcion);
   formData.append("estado", data.estado ? "true" : "false");
@@ -25,6 +27,9 @@ export async function postElemento(data: ElementoPostData): Promise<any> {
   formData.append("noPerecedero", data.noPerecedero ? "true" : "false");
   if (data.fechaVencimiento) {
     formData.append("fechaVencimiento", data.fechaVencimiento.toString());
+  }
+  if (data.codigoBarras) {
+    formData.append("codigoBarras", data.codigoBarras);
   }
   if (data.fkUnidadMedida) {
     formData.append("fkUnidadMedida", data.fkUnidadMedida.toString());
@@ -47,7 +52,6 @@ export async function postElemento(data: ElementoPostData): Promise<any> {
   if (data.imagen) {
     formData.append("imagen", data.imagen);
   }
-
 
   console.log("Enviando:", [...formData.entries()]);
 

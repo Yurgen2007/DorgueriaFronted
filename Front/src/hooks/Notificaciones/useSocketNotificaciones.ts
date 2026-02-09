@@ -1,18 +1,20 @@
 import { useEffect, useRef } from "react";
 import { io, Socket } from "socket.io-client";
+
 import { Notificacion } from "@/types/Notificacion";
 
 const SOCKET_URL = import.meta.env.VITE_SOCKET_BASE_URL;
 
 export function useSocketNotificaciones(
   usuarioId: number,
-  onNotificacion: (noti: Notificacion) => void
+  onNotificacion: (noti: Notificacion) => void,
 ) {
   const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
     if (!usuarioId || usuarioId <= 0) {
       console.warn("⚠️ ID de usuario no válido para el socket:", usuarioId);
+
       return;
     }
 
@@ -50,6 +52,6 @@ export function useSocketNotificaciones(
       socket.disconnect();
     };
   }, [usuarioId, onNotificacion]);
-  
+
   return socketRef;
 }

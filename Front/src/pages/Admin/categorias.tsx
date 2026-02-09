@@ -1,18 +1,25 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Card, CardBody } from "@heroui/react";
+
 import Globaltable from "@/components/organismos/table.tsx";
 import { TableColumn } from "@/components/organismos/table.tsx";
 import Buton from "@/components/molecules/Button";
 import Modall from "@/components/organismos/modal";
 import FormCategorias from "@/components/organismos/Categorias/FormCategorias";
-import { useState } from "react";
 import FormUpCategoria from "@/components/organismos/Categorias/FormUpCategoria";
 import { Categoria } from "@/types/Categorias";
 import { useCategoria } from "@/hooks/Categorias/useCategorias";
-import { useNavigate } from "react-router-dom";
-import { Card, CardBody } from "@heroui/react";
 
 const CategoriasTable = () => {
-  const { categorias, isLoading, isError, error, addCategoria, removeCategoria } =
-    useCategoria();
+  const {
+    categorias,
+    isLoading,
+    isError,
+    error,
+    addCategoria,
+    removeCategoria,
+  } = useCategoria();
 
   //Modal agregar
   const [isOpen, setIsOpen] = useState(false);
@@ -21,7 +28,7 @@ const CategoriasTable = () => {
   //Modal actualizar
   const [IsOpenUpdate, setIsOpenUpdate] = useState(false);
   const [selectedCategoria, setSelectedCategoria] = useState<Categoria | null>(
-    null
+    null,
   );
 
   const navigate = useNavigate();
@@ -65,10 +72,10 @@ const CategoriasTable = () => {
         <span>
           {categoria.createdAt
             ? new Date(categoria.createdAt).toLocaleDateString("es-ES", {
-              year: "numeric",
-              month: "2-digit",
-              day: "2-digit",
-            })
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+              })
             : "N/A"}
         </span>
       ),
@@ -80,10 +87,10 @@ const CategoriasTable = () => {
         <span>
           {categoria.updatedAt
             ? new Date(categoria.updatedAt).toLocaleDateString("es-ES", {
-              year: "numeric",
-              month: "2-digit",
-              day: "2-digit",
-            })
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+              })
             : "N/A"}
         </span>
       ),
@@ -107,7 +114,7 @@ const CategoriasTable = () => {
         ? categorias.idCategoria.toString()
         : crypto.randomUUID(),
       estado: Boolean(categorias.estado),
-      idCategoria: categorias.idCategoria
+      idCategoria: categorias.idCategoria,
     }));
 
   return (
@@ -130,15 +137,15 @@ const CategoriasTable = () => {
         onOpenChange={handleClose}
       >
         <FormCategorias
-          id="categoria-form"
           addData={handleAddCategoria}
+          id="categoria-form"
           onClose={handleClose}
         />
         <Buton
+          className="rounded-xl"
+          form="categoria-form"
           text="Guardar"
           type="submit"
-          form="categoria-form"
-          className="rounded-xl"
         />
       </Modall>
 
@@ -149,8 +156,8 @@ const CategoriasTable = () => {
       >
         {selectedCategoria && (
           <FormUpCategoria
-            categorias={categoriasWithKey ?? []}
             categoriaId={selectedCategoria.idCategoria as number}
+            categorias={categoriasWithKey ?? []}
             id="FormUpdate"
             onclose={handleCloseUpdate}
           />
@@ -159,14 +166,14 @@ const CategoriasTable = () => {
 
       {categoriasWithKey && (
         <Globaltable
-          data={categoriasWithKey}
           columns={columns}
-          onEdit={handleEdit}
-          onDelete={handleState}
-          useDeleteInsteadOfChangeState={true}
+          data={categoriasWithKey}
           extraHeaderContent={
             <Buton text="Añadir Categoria" onPress={() => setIsOpen(true)} />
           }
+          useDeleteInsteadOfChangeState={true}
+          onDelete={handleState}
+          onEdit={handleEdit}
         />
       )}
     </div>

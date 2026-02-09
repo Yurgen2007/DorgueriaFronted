@@ -1,5 +1,6 @@
-import { Modulo, UpModulo } from "@/types/Modulo";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
+import { Modulo, UpModulo } from "@/types/Modulo";
 import { getModulo } from "@/axios/Modulos/getModulos";
 import { postModulo } from "@/axios/Modulos/postModulo";
 import { putModulo } from "@/axios/Modulos/putModulo";
@@ -29,7 +30,7 @@ export function useModulo() {
 
   const getModuloById = (
     id: number,
-    modulos: Modulo[] | undefined = data
+    modulos: Modulo[] | undefined = data,
   ): Modulo | null => {
     return modulos?.find((modulo) => modulo.idModulo === id) || null;
   };

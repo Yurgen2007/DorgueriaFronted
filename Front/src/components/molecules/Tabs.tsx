@@ -21,10 +21,10 @@ export default function Tap({ tabs }: Props) {
       <CardBody>
         <div className="flex flex-col gap-4">
           <Tabs
-            selectedKey={selectedKey}
-            onSelectionChange={(key) => setSelectedKey(String(key))}
-            variant="light"
             aria-label="Report Tabs"
+            selectedKey={selectedKey}
+            variant="light"
+            onSelectionChange={(key) => setSelectedKey(String(key))}
           >
             {tabs.map(({ key, title }) => (
               <Tab
@@ -38,11 +38,7 @@ export default function Tap({ tabs }: Props) {
             ))}
           </Tabs>
 
-          {selectedTab && (
-            <div className="mt-4">
-              {selectedTab.content}
-            </div>
-          )}
+          {selectedTab && <div className="mt-4">{selectedTab.content}</div>}
         </div>
       </CardBody>
     </Card>

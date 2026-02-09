@@ -2,7 +2,11 @@ import { Form } from "@heroui/form";
 import { addToast, Input } from "@heroui/react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CaracteristicaCreate, CaracteristicaCreateSchema } from "@/schemas/Caracteristica";
+
+import {
+  CaracteristicaCreate,
+  CaracteristicaCreateSchema,
+} from "@/schemas/Caracteristica";
 
 type FormularioProps = {
   addData: (tipo: CaracteristicaCreate) => Promise<void>;
@@ -10,7 +14,11 @@ type FormularioProps = {
   id: string;
 };
 
-export default function FormularioCaracteristicas({ addData, onClose, id }: FormularioProps) {
+export default function FormularioCaracteristicas({
+  addData,
+  onClose,
+  id,
+}: FormularioProps) {
   const {
     register,
     handleSubmit,
@@ -35,19 +43,20 @@ export default function FormularioCaracteristicas({ addData, onClose, id }: Form
       console.error("Error al guardar:", error);
     }
   };
+
   return (
     <Form
+      className="w-full space-y-4"
       id={id}
       onSubmit={handleSubmit(onSubmit)}
-      className="w-full space-y-4"
     >
       <Input
         label="Nombre"
         placeholder="Nombre"
         type="text"
         {...register("nombre")}
-        isInvalid={!!errors.nombre}
         errorMessage={errors.nombre?.message}
+        isInvalid={!!errors.nombre}
       />
     </Form>
   );

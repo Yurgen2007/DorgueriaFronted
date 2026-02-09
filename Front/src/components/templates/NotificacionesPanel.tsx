@@ -1,98 +1,143 @@
+import { useNavigate } from "react-router-dom";
+
+import Modall from "../organismos/modal";
+
 import { useAuth } from "@/providers/AuthProvider";
 import { useNotificaciones } from "@/hooks/Notificaciones/useNotificaciones";
-import Modall from "../organismos/modal";
-import { useNavigate } from "react-router-dom";
+import { formatDateColombia } from "@/utils/dateUtils";
 
 type Props = {
   open: boolean;
   onClose: () => void;
 };
 
+// Funcion para obtener badge segun el tipo de notificacion
+const getTipoBadge = (titulo: string) => {
+  const t = titulo.toLowerCase();
+  if (t.includes('stock')) {
+    return { color: 'bg-red-100 text-red-800', icon: '⚠️', label: 'Stock Bajo' };
+  }
+  if (t.includes('caducar') || t.includes('caducidad')) {
+    return { color: 'bg-yellow-100 text-yellow-800', icon: '🗓️', label: 'Por Caducar' };
+  }
+  if (t.includes('movimiento')) {
+    return { color: 'bg-blue-100 text-blue-800', icon: '📦', label: 'Movimiento' };
+  }
+  if (t.includes('ingreso')) {
+    return { color: 'bg-green-100 text-green-800', icon: '✅', label: 'Ingreso' };
+  }
+  return { color: 'bg-gray-100 text-gray-800', icon: '📌', label: 'Notificacion' };
+};
+
+// Funcion para obtener detalles adicionales del elemento
+const getElementoDetails = (noti: any) => {
+  if (noti.data?.idElemento) {
+    const detalles = [];
+    if (noti.data?.stock) {
+      detalles.push(`Stock actual: ${noti.data.stock} unidades`);
+    }
+    if (noti.data?.diasRestantes) {
+      detalles.push(`Vence en ${noti.data.diasRestantes} dias`);
+    }
+    if (noti.data?.fechaCaducidad) {
+      const fecha = formatDateColombia(noti.data.fechaCaducidad);
+      detalles.push(`Fecha de vencimiento: ${fecha}`);
+    }
+    return detalles;
+  }
+  return [];
+};
+
 export default function NotificacionesPanel({ open, onClose }: Props) {
   const { idUsuario } = useAuth();
-  const { notificaciones, isLoading, cambiarEstado, marcarLeida } =
+  const { notificaciones, isLoading, marcarLeida, refetch } =
     useNotificaciones(idUsuario!);
 
   const navigate = useNavigate();
 
-  const redirigirAMovimiento = (idMovimiento: number) => {
-    onClose();
-    navigate(`/bodega/movimientosDetalle/${idMovimiento}`);
-  };
-
   if (isLoading) return <p className="p-4">Cargando notificaciones...</p>;
 
   return (
-    <Modall isOpen={open} onOpenChange={onClose} ModalTitle="Notificaciones">
+    <Modall ModalTitle="Notificaciones" isOpen={open} onOpenChange={onClose}>
       <div className="p-4 space-y-4 max-h-[80vh] overflow-y-auto">
-        <h2 className="text-xl font-bold">Notificaciones</h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-xl font-bold">Notificaciones</h2>
+        </div>
 
-        {notificaciones?.length === 0 && <p>No hay notificaciones.</p>}
-
-        {notificaciones?.map((noti) => (
-          <div
-            key={noti.idNotificacion}
-            onClick={() => {
-              if (noti.requiereAccion && noti.data?.idMovimiento) {
-                redirigirAMovimiento(noti.data.idMovimiento);
-              }
-            }}
-            className="bg-white dark:bg-zinc-800 shadow-md rounded-xl p-4 border border-gray-200 dark:border-zinc-700 cursor cursor-pointer"
-          >
-            <h3 className="font-semibold">{noti.titulo}</h3>
-            <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">
-              {noti.mensaje}
-            </p>
-
-            {/* Acciones si requiere revisión */}
-            {noti.requiereAccion && noti.estado === "enProceso" && (
-              <div className="flex gap-2">
-                <button
-                  onClick={async () => {
-                    await cambiarEstado({
-                      id: noti.idNotificacion,
-                      estado: "aceptado",
-                    });
-                    navigate("/bodega/movimientos"); // Redirige después de aceptar
-                  }}
-                  className="px-3 py-1 rounded-md bg-green-500 text-white hover:bg-green-600"
-                >
-                  Aceptar
-                </button>
-                <button
-                  onClick={async () =>{
-                    await cambiarEstado({
-                      id: noti.idNotificacion,
-                      estado: "cancelado",
-                    })
-                    navigate("/bodega/movimientos");
-                  }}
-                  className="px-3 py-1 rounded-md bg-red-500 text-white hover:bg-red-600"
-                >
-                  Rechazar
-                </button>
-              </div>
-            )}
-
-            {/* Estado actual */}
-            {noti.estado && (
-              <p className="text-sm mt-2 text-gray-500">
-                Estado: <strong>{noti.estado}</strong>
-              </p>
-            )}
-
-            {/* Botón marcar como leída */}
-            {!noti.leido && (
-              <button
-                onClick={async () =>{ await marcarLeida(noti.idNotificacion)
-                  navigate("/");}}
-                className="mt-2 text-blue-500 underline text-sm"
-              >
-                Marcar como leída
-              </button>
-            )}
+        {notificaciones?.length === 0 && (
+          <div className="text-center py-8 text-gray-500">
+            <p className="text-4xl mb-2">🔔</p>
+            <p>No hay notificaciones.</p>
           </div>
-        ))}
+        )}
+
+        {notificaciones?.map((noti) => {
+          const badge = getTipoBadge(noti.titulo);
+          const elementoDetails = getElementoDetails(noti);
+          
+          return (
+            <div
+              key={noti.idNotificacion}
+              className={`bg-white dark:bg-zinc-800 shadow-md rounded-xl p-4 border border-gray-200 dark:border-zinc-700 cursor-pointer transition-all hover:shadow-lg ${
+                !noti.leido ? 'border-l-4 border-l-red-500' : ''
+              }`}
+              onClick={() => {
+                marcarLeida(noti.idNotificacion);
+              }}
+            >
+              <div className="flex items-start justify-between gap-2 mb-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-xl">{badge.icon}</span>
+                  <div>
+                    <h3 className="font-semibold text-lg">{noti.titulo}</h3>
+                    <span className={`inline-block px-2 py-0.5 text-xs rounded-full ${badge.color}`}>
+                      {badge.label}
+                    </span>
+                  </div>
+                </div>
+                {!noti.leido && (
+                  <span className="px-2 py-1 text-xs rounded-full bg-primary text-white animate-pulse">
+                    Nuevo
+                  </span>
+                )}
+              </div>
+              
+              <p className="text-sm text-gray-700 dark:text-gray-300 mt-2">
+                {noti.mensaje}
+              </p>
+              
+              {/* Mostrar detalles del elemento */}
+              {elementoDetails.length > 0 && (
+                <div className="mt-3 p-2 bg-gray-50 dark:bg-zinc-700 rounded-lg">
+                  {elementoDetails.map((detail, idx) => (
+                    <p key={idx} className="text-sm text-gray-600 dark:text-gray-300">
+                      {detail}
+                    </p>
+                  ))}
+                </div>
+              )}
+              
+              <div className="flex items-center justify-between mt-3 pt-2 border-t border-gray-100 dark:border-zinc-600">
+                <p className="text-xs text-gray-400">
+                  {new Date(noti.createdAt).toLocaleString('es-ES')}
+                </p>
+                
+                {/* Boton marcar como leida */}
+                {!noti.leido && (
+                  <button
+                    className="text-primary underline text-sm hover:text-primary/80"
+                    onClick={async (e) => {
+                      e.stopPropagation();
+                      await marcarLeida(noti.idNotificacion);
+                    }}
+                  >
+                    Marcar como leida
+                  </button>
+                )}
+              </div>
+            </div>
+          );
+        })}
       </div>
     </Modall>
   );

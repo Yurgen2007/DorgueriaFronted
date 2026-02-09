@@ -1,7 +1,8 @@
-import { getRolePermisos } from "@/axios/RolPermiso/getRolePermisos";
-import { patchRolePermiso } from "@/axios/RolPermiso/patchRolePermiso";
 import { Button, Checkbox, Spinner } from "@heroui/react";
 import { useEffect, useState } from "react";
+
+import { getRolePermisos } from "@/axios/RolPermiso/getRolePermisos";
+import { patchRolePermiso } from "@/axios/RolPermiso/patchRolePermiso";
 
 export default function FormularioRolPermiso({ rol }: { rol: number }) {
   const [loading, setLoading] = useState<boolean>(true);
@@ -13,6 +14,7 @@ export default function FormularioRolPermiso({ rol }: { rol: number }) {
   useEffect(() => {
     async function getPermisos() {
       const data: any = await getRolePermisos(rol);
+
       setPermisosAgrupados(data.permisosAgrupados);
       setAssignedPermisos(data.permisosAsignados);
       setLoading(false);
@@ -26,12 +28,12 @@ export default function FormularioRolPermiso({ rol }: { rol: number }) {
 
   const toggleModulo = (id: number) =>
     setOpenModulos((prev) =>
-      prev.includes(id) ? prev.filter((m) => m !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((m) => m !== id) : [...prev, id],
     );
 
   const toggleRuta = (id: number) =>
     setOpenRutas((prev) =>
-      prev.includes(id) ? prev.filter((r) => r !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((r) => r !== id) : [...prev, id],
     );
 
   if (loading) return <Spinner className="my-12" />;
@@ -41,8 +43,8 @@ export default function FormularioRolPermiso({ rol }: { rol: number }) {
       {permisosAgrupados.map((modulo) => (
         <div key={modulo.idModulo} className="border rounded p-2">
           <Button
-            variant="ghost"
             className="w-auto text-left font-bold px-2 py-1"
+            variant="ghost"
             onClick={() => toggleModulo(modulo.idModulo)}
           >
             {modulo.nombreModulo}
@@ -56,8 +58,8 @@ export default function FormularioRolPermiso({ rol }: { rol: number }) {
                   className="border-l-2 border-gray-300 pl-4"
                 >
                   <Button
-                    variant="ghost"
                     className="w-auto text-left text-sm px-2 py-1"
+                    variant="ghost"
                     onClick={() => toggleRuta(ruta.idRuta)}
                   >
                     {ruta.nombreRuta}
@@ -72,7 +74,7 @@ export default function FormularioRolPermiso({ rol }: { rol: number }) {
                         >
                           <Checkbox
                             defaultSelected={assignedPermisos.includes(
-                              permiso.idPermiso
+                              permiso.idPermiso,
                             )}
                             onChange={() => handleChange(permiso.idPermiso)}
                           />
