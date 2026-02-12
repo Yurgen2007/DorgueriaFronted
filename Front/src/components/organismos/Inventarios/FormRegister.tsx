@@ -1,6 +1,6 @@
-import { Form } from "@heroui/form";
-import { addToast, Input, Select, SelectItem } from "@heroui/react";
-import { Controller, useForm } from "react-hook-form";
+import { Form } from "@heroui/react";
+import { addToast, Input } from "@heroui/react";
+import { Controller, useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
@@ -11,37 +11,30 @@ import FormularioElementos from "../Elementos/FormRegister";
 import Buton from "@/components/molecules/Button";
 import { InventarioCreate, InventarioCreateSchema } from "@/schemas/Inventario";
 import { useElemento } from "@/hooks/Elementos/useElemento";
-import { useSitios } from "@/hooks/sitios/useSitios";
 type FormularioProps = {
   addData: (inventario: InventarioCreate) => Promise<void>;
   onClose: () => void;
   id: string;
-  idSitio: number;
 };
 
 export default function FormularioInventario({
   addData,
   onClose,
   id,
-  idSitio,
 }: FormularioProps) {
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm<InventarioCreate>({
-    resolver: zodResolver(InventarioCreateSchema),
     mode: "onChange",
+    resolver: zodResolver(InventarioCreateSchema),
     defaultValues: {
-      stock: 0,
+      nombre: "",
       estado: true,
     },
   });
-  const {
-    sitios,
-    isLoading: loadingSitios,
-    isError: errorSitios,
-  } = useSitios();
+
   const {
     elementos,
     isLoading: loadingElementos,
@@ -53,7 +46,7 @@ export default function FormularioInventario({
 
   const handleCloseElemento = () => setShowModalElemento(false);
 
-  const onSubmit = async (data: InventarioCreate) => {
+  const onSubmit: SubmitHandler<InventarioCreate> = async (data) => {
     try {
       await addData(data);
       onClose();
@@ -80,124 +73,17 @@ export default function FormularioInventario({
       >
         <Controller
           control={control}
-          name="estado"
+          name="nombre"
           render={({ field }) => (
-            <Select
-              label="Estado"
-              placeholder="Selecciona estado"
+            <Input
               {...field}
-              isDisabled
-              defaultSelectedKeys={["true"]}
-              errorMessage={errors.estado?.message}
-              isInvalid={!!errors.estado}
-              value={field.value ? "true" : "false"}
-              onChange={(e) => field.onChange(e.target.value === "true")}
-            >
-              <SelectItem key="true">Activo</SelectItem>
-              <SelectItem key="false">Inactivo</SelectItem>
-            </Select>
+              isInvalid={!!errors.nombre}
+              errorMessage={errors.nombre?.message}
+              label="Nombre"
+              placeholder="Ingresa el nombre del inventario"
+            />
           )}
         />
-
-        {!loadingSitios && !errorSitios && Array.isArray(sitios) && (
-          <Controller
-            control={control}
-            defaultValue={typeof idSitio === "number" ? idSitio : undefined}
-            name="fkSitio"
-            render={({ field }) => {
-              const sitioActual = sitios.find((s) => s.idSitio === idSitio);
-
-              return (
-                <div className="w-full">
-                  {idSitio && sitioActual ? (
-                    <Input
-                      isDisabled
-                      isReadOnly
-                      className="w-full"
-                      label="Sitio"
-                      value={sitioActual.nombre}
-                    />
-                  ) : (
-                    <Select
-                      className="w-full"
-                      errorMessage={errors.fkSitio?.message}
-                      isInvalid={!!errors.fkSitio}
-                      label="Sitio"
-                      placeholder="Selecciona un sitio"
-                      selectedKeys={field.value ? [String(field.value)] : []}
-                      onChange={(e) => {
-                        const sitioId = Number(e.target.value);
-
-                        field.onChange(sitioId);
-                      }}
-                    >
-                      {sitios
-                        .filter((i) => i.estado === true)
-                        .map((sitio) => (
-                          <SelectItem
-                            key={sitio.idSitio}
-                            textValue={sitio.nombre}
-                          >
-                            {sitio.nombre}
-                          </SelectItem>
-                        ))}
-                    </Select>
-                  )}
-                </div>
-              );
-            }}
-          />
-        )}
-
-        {!loadingElementos && !errorElementos && elementos && (
-          <Controller
-            control={control}
-            name="fkElemento"
-            render={({ field }) => (
-              <div className="w-full flex">
-                <Select
-                  {...field}
-                  aria-label="Seleccionar elemento"
-                  className="w-full"
-                  errorMessage={errors.fkElemento?.message}
-                  isInvalid={!!errors.fkElemento}
-                  label="Elemento"
-                  placeholder="Selecciona un elemento"
-                  selectedKeys={field.value ? [field.value.toString()] : []}
-                  onChange={(e) => {
-                    const elementoId = Number(e.target.value);
-
-                    field.onChange(elementoId);
-                  }}
-                >
-                  {elementos.length ? (
-                    elementos
-                      .filter((e) => e.estado === true)
-                      .map((elemento) => (
-                        <SelectItem
-                          key={elemento.idElemento}
-                          textValue={elemento.nombre}
-                        >
-                          {elemento.nombre}
-                        </SelectItem>
-                      ))
-                  ) : (
-                    <SelectItem isDisabled>
-                      No hay elementos disponibles
-                    </SelectItem>
-                  )}
-                </Select>
-                <Buton
-                  className="m-2 w-10 h-10 !px-0 !min-w-0 rounded-xl"
-                  type="button"
-                  onPress={() => setShowModalElemento(true)}
-                >
-                  <PlusCircleIcon />
-                </Buton>
-              </div>
-            )}
-          />
-        )}
       </Form>
       <Modal
         ModalTitle="Agregar Elemento"

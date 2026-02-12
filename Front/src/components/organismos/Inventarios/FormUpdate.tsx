@@ -1,5 +1,5 @@
 import { Input } from "@heroui/input";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { addToast } from "@heroui/react";
 import { AxiosError } from "axios";
@@ -43,11 +43,11 @@ export const FormUpdate = ({
     mode: "onChange",
     defaultValues: {
       idInventario: foundInventario.idInventario,
-      stock: foundInventario.stock,
+      nombre: foundInventario.nombre,
     },
   });
 
-  const onSubmit = async (data: InventarioUpdate) => {
+  const onSubmit: SubmitHandler<InventarioUpdate> = async (data) => {
     console.log("Enviando datos:", data);
     if (!data.idInventario) return;
     try {
@@ -85,11 +85,11 @@ export const FormUpdate = ({
       onSubmit={handleSubmit(onSubmit)}
     >
       <Input
-        label="Cantidad"
-        placeholder="Ingrese la cantidad ..."
-        {...register("stock", { valueAsNumber: true })}
-        errorMessage={errors.stock?.message}
-        isInvalid={!!errors.stock}
+        label="Nombre"
+        placeholder="Ingrese el nombre ..."
+        {...register("nombre")}
+        errorMessage={errors.nombre?.message}
+        isInvalid={!!errors.nombre}
       />
       <Buton
         className="w-full rounded-xl"

@@ -10,7 +10,7 @@ export type InventarioUpdate = z.infer<typeof InventarioUpdateSchema>;
 
 export const InventarioCreateSchema = z.object({
   nombre: z.string().min(1, { message: "Nombre es requerido" }),
-  estado: z.boolean({ required_error: "Estado es requerido" }).default(true),
+  estado: z.boolean(),
 });
 
 export type InventarioCreate = z.infer<typeof InventarioCreateSchema>;
