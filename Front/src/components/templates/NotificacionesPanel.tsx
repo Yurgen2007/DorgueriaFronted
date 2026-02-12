@@ -33,6 +33,9 @@ const getTipoBadge = (titulo: string) => {
 const getElementoDetails = (noti: any) => {
   if (noti.data?.idElemento) {
     const detalles = [];
+    if (noti.data?.codigoBarras) {
+      detalles.push(`Código de barras: ${noti.data.codigoBarras}`);
+    }
     if (noti.data?.stock) {
       detalles.push(`Stock actual: ${noti.data.stock} unidades`);
     }

@@ -55,7 +55,7 @@ export const FormUpdate = ({ Users, userId, id, onclose }: FormuProps) => {
       fkRol: foundUser.fkRol,
       serviceMail: foundUser.serviceMail || "",
       mailUser: foundUser.mailUser || "",
-      mailPassword: "",
+      mailPassword: foundUser.mailPassword || "",
     },
   });
 

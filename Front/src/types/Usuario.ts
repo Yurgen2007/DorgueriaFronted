@@ -10,6 +10,10 @@ export type User = {
   cargo?: string;
   password?: string;
   fkRol?: number;
+  // Campos de configuracion de correo
+  serviceMail?: string;
+  mailUser?: string;
+  mailPassword?: string;
 };
 
 export type Perfil = {
@@ -53,6 +57,12 @@ export type putUser = {
   edad: number | null;
   telefono: string | null;
   correo: string | null;
+  cargo?: string;
+  fkRol?: number;
+  // Campos de configuracion de correo
+  serviceMail?: string;
+  mailUser?: string;
+  mailPassword?: string;
 };
 
 export type LoginCrede = {
