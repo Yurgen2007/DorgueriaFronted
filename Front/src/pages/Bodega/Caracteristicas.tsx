@@ -12,7 +12,7 @@ import { FormUpdate } from "@/components/organismos/Caracteristicas/FormUpdate";
 import FormularioCaracteristicas from "@/components/organismos/Caracteristicas/FormRegister";
 
 export const CaracteristicasTable = () => {
-  const { caracteristicas, isLoading, isError, error, addCaracteristica } =
+  const { caracteristicas, isLoading, isError, error, addCaracteristica, removeCaracteristica } =
     useCaracteristica();
 
   //Modal agregar
@@ -48,6 +48,12 @@ export const CaracteristicasTable = () => {
   const handleEdit = (caracteristica: Caracteristica) => {
     setSelectedCaracteristicas(caracteristica);
     setIsOpenUpdate(true);
+  };
+
+  const handleDelete = async (caracteristica: Caracteristica) => {
+    if (caracteristica.idCaracteristica) {
+      await removeCaracteristica(caracteristica.idCaracteristica);
+    }
   };
 
   const columns: TableColumn<Caracteristica>[] = [
@@ -163,6 +169,8 @@ export const CaracteristicasTable = () => {
             />
           }
           onEdit={handleEdit}
+          onDelete={handleDelete}
+          useDeleteInsteadOfChangeState={true}
         />
       )}
     </div>

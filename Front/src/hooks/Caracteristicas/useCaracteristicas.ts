@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getCaracteristicas } from "@/axios/Caracteristicas/getCaracteris";
 import { postCaracteristica } from "@/axios/Caracteristicas/postCaracteris";
 import { updateCategoria } from "@/axios/Caracteristicas/putCaracteris";
+import { deleteCaracteristica } from "@/axios/Caracteristicas/deleteCaracteris";
 import { Caracteristica } from "@/types/Caracteristica";
 
 export function useCaracteristica() {
@@ -63,6 +64,22 @@ export function useCaracteristica() {
     return updateCaracteristicaMutation.mutateAsync({ id, data });
   };
 
+  const deleteCaracteristicaMutation = useMutation({
+    mutationFn: deleteCaracteristica,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["caracteristicas"],
+      });
+    },
+    onError: (error) => {
+      console.error("Error al eliminar:", error);
+    },
+  });
+
+  const removeCaracteristica = async (id: number) => {
+    return deleteCaracteristicaMutation.mutateAsync(id);
+  };
+
   return {
     caracteristicas: data,
     isLoading,
@@ -71,5 +88,6 @@ export function useCaracteristica() {
     addCaracteristica,
     getCaracteristicaById,
     updateCaracteristica,
+    removeCaracteristica,
   };
 }

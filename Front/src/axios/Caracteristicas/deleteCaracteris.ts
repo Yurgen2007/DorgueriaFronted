@@ -1,6 +1,6 @@
-import axios from "axios";
+import axiosAPI from "../axiosAPI";
 
 export const deleteCaracteristica = async (id: number) => {
-  const response = await axios.delete(`/caracteristicas/${id}`);
+  const response = await axiosAPI.delete(`/caracteristicas/${id}`);
   return response.data;
 };
