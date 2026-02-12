@@ -14,6 +14,8 @@ type Auth = {
   setPerfil: React.Dispatch<React.SetStateAction<string | undefined>>;
   idUsuario: number | undefined;
   setIdUser: React.Dispatch<React.SetStateAction<number | undefined>>;
+  idRol: number | undefined;
+  setIdRol: React.Dispatch<React.SetStateAction<number | undefined>>;
   permissions: any[];
 
   setPermissions: React.Dispatch<React.SetStateAction<any[]>>;
@@ -34,6 +36,7 @@ export default function AuthProvider({
   const [nombre, setNombre] = useState<string | undefined>(undefined);
   const [perfil, setPerfil] = useState<string | undefined>(undefined);
   const [idUsuario, setIdUser] = useState<number | undefined>(undefined);
+  const [idRol, setIdRol] = useState<number | undefined>(undefined);
   const [permissions, setPermissions] = useState<any[]>([]);
 
   const cookies = new Cookies();
@@ -96,6 +99,8 @@ export default function AuthProvider({
         setPerfil,
         setIdUser,
         idUsuario,
+        idRol,
+        setIdRol,
         permissions,
         setPermissions,
       }}

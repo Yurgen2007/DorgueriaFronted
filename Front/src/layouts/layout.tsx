@@ -8,13 +8,18 @@ import NotificacionesPanel from "@/components/templates/NotificacionesPanel";
 import { useAuth } from "@/providers/AuthProvider";
 import { useSocketNotificaciones } from "@/hooks/Notificaciones/useSocketNotificaciones";
 import { useNotificaciones } from "@/hooks/Notificaciones/useNotificaciones";
+import usePermissions from "@/hooks/Usuarios/usePermissions";
 
 export default function Layout() {
   const [isNotifOpen, setIsNotifOpen] = useState(false);
   const { idUsuario } = useAuth();
+  const { userHasPermission } = usePermissions();
 
   const { notificaciones } = useNotificaciones(idUsuario!);
   const cantidadNoLeidas = notificaciones?.filter((n) => !n.leido).length ?? 0;
+
+  // Solo mostrar notificaciones para Administrador (tiene permiso 71 - Exportar PDF)
+  const isAdmin = userHasPermission(71);
 
   useEffect(() => {
     if (idUsuario) {
@@ -37,16 +42,19 @@ export default function Layout() {
         <Nav
           cantidadNoLeidas={cantidadNoLeidas}
           onOpenNotifications={() => setIsNotifOpen(true)}
+          showNotifications={isAdmin}
         >
           <DarkMode />
         </Nav>
 
         <Outlet />
 
-        <NotificacionesPanel
-          open={isNotifOpen}
-          onClose={() => setIsNotifOpen(false)}
-        />
+        {isAdmin && (
+          <NotificacionesPanel
+            open={isNotifOpen}
+            onClose={() => setIsNotifOpen(false)}
+          />
+        )}
       </main>
     </div>
   );

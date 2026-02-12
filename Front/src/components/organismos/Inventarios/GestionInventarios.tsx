@@ -20,8 +20,10 @@ import FormInventario from "./FormInventario";
 import { useInventario } from "@/hooks/Inventarios/useInventario";
 import Buton from "@/components/molecules/Button";
 import { InventarioCreate } from "@/schemas/Inventario";
+import usePermissions from "@/hooks/Usuarios/usePermissions";
 
 export const GestionInventarios = () => {
+  const { userHasPermission } = usePermissions();
   const {
     inventarios = [],
     addInventario,
@@ -108,13 +110,15 @@ export const GestionInventarios = () => {
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold">Gestión de Inventarios</h2>
-        <Buton
-          color="primary"
-          startContent={<PlusIcon className="w-5 h-5" />}
-          onPress={() => setShowModalCreate(true)}
-        >
-          Nuevo Inventario
-        </Buton>
+        {userHasPermission(27) && (
+          <Buton
+            color="primary"
+            startContent={<PlusIcon className="w-5 h-5" />}
+            onPress={() => setShowModalCreate(true)}
+          >
+            Nuevo Inventario
+          </Buton>
+        )}
       </div>
 
       <Card>
@@ -146,32 +150,36 @@ export const GestionInventarios = () => {
                     </TableCell>
                     <TableCell className="text-center">
                       <div className="flex gap-2 justify-center">
-                        <Button
-                          color="warning"
-                          size="sm"
-                          startContent={<PencilIcon className="w-4 h-4" />}
-                          variant="flat"
-                          onPress={() => {
-                            if (inv.idInventario) {
-                              handleChangeState(inv.idInventario);
-                            }
-                          }}
-                        >
-                          {inv.estado ? "Desactivar" : "Activar"}
-                        </Button>
-                        <Button
-                          color="danger"
-                          size="sm"
-                          startContent={<TrashIcon className="w-4 h-4" />}
-                          variant="flat"
-                          onPress={() => {
-                            if (inv.idInventario) {
-                              handleDelete(inv.idInventario);
-                            }
-                          }}
-                        >
-                          Eliminar
-                        </Button>
+                        {userHasPermission(30) && (
+                          <Button
+                            color="warning"
+                            size="sm"
+                            startContent={<PencilIcon className="w-4 h-4" />}
+                            variant="flat"
+                            onPress={() => {
+                              if (inv.idInventario) {
+                                handleChangeState(inv.idInventario);
+                              }
+                            }}
+                          >
+                            {inv.estado ? "Desactivar" : "Activar"}
+                          </Button>
+                        )}
+                        {userHasPermission(30) && (
+                          <Button
+                            color="danger"
+                            size="sm"
+                            startContent={<TrashIcon className="w-4 h-4" />}
+                            variant="flat"
+                            onPress={() => {
+                              if (inv.idInventario) {
+                                handleDelete(inv.idInventario);
+                              }
+                            }}
+                          >
+                            Eliminar
+                          </Button>
+                        )}
                       </div>
                     </TableCell>
                   </TableRow>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { DocumentTextIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
+import { DocumentTextIcon } from "@heroicons/react/24/outline";
 
 import { CodigoInventario } from "../../CodigoInventario";
 
@@ -152,13 +152,6 @@ export const InventariosTable = ({ idSitio }: InventariosTableProps) => {
       label: "",
       render: (elemento: Elemento) => (
         <div className="flex gap-2">
-          <Buton
-            className="w-[50px] h-[40px] p-0 min-w-0"
-            onPress={() => handleOpenAddStock(elemento)}
-          >
-            <PlusCircleIcon />
-          </Buton>
-
           {!!elemento.fkCaracteristica && (
             <Buton
               className="w-[50px] h-[40px] p-0 min-w-0 bg-primary hover:bg-gray-700 text-white"

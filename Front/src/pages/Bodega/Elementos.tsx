@@ -240,7 +240,7 @@ export const ElementosTable = () => {
               {userHasPermission(18) && (
                 <Buton text="Nuevo elemento" onPress={() => setIsOpen(true)} />
               )}
-              {userHasPermission(19) && (
+              {userHasPermission(71) && (
                 <Buton
                   text="Exportar Excel"
                   onPress={handleExportToExcel}

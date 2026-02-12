@@ -20,12 +20,14 @@ type NavProps = {
   children?: ReactNode;
   onOpenNotifications?: () => void;
   cantidadNoLeidas?: number;
+  showNotifications?: boolean;
 };
 
 export function Nav({
   children,
   onOpenNotifications,
   cantidadNoLeidas = 0,
+  showNotifications = true,
 }: NavProps) {
   const navigate = useNavigate();
   const { nombre, perfil } = useAuth();
@@ -40,42 +42,44 @@ export function Nav({
       </NavbarContent>
 
       <div className="flex items-center gap-4 ms-auto">
-        <Dropdown placement="bottom-end">
-          <DropdownTrigger>
-            <button
-              className="relative text-gray-700 dark:text-white"
-              onClick={onOpenNotifications}
-            >
-              <BellIcon className="w-6 h-6" />
+        {showNotifications && (
+          <Dropdown placement="bottom-end">
+            <DropdownTrigger>
+              <button
+                className="relative text-gray-700 dark:text-white"
+                onClick={onOpenNotifications}
+              >
+                <BellIcon className="w-6 h-6" />
 
-              {cantidadNoLeidas > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-600 text-white rounded-full px-1.5 text-xs">
-                  {cantidadNoLeidas}
-                </span>
-              )}
-            </button>
-          </DropdownTrigger>
+                {cantidadNoLeidas > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-600 text-white rounded-full px-1.5 text-xs">
+                    {cantidadNoLeidas}
+                  </span>
+                )}
+              </button>
+            </DropdownTrigger>
 
-          <DropdownMenu aria-label="Notificaciones" className="max-w-sm w-72">
-            <DropdownItem
-              key="notificaciones-header"
-              isReadOnly
-              className="font-semibold text-center"
-              textValue="notificaciones"
-            >
-              Notificaciones
-            </DropdownItem>
+            <DropdownMenu aria-label="Notificaciones" className="max-w-sm w-72">
+              <DropdownItem
+                key="notificaciones-header"
+                isReadOnly
+                className="font-semibold text-center"
+                textValue="notificaciones"
+              >
+                Notificaciones
+              </DropdownItem>
 
-            <DropdownItem
-              key="ver-todo"
-              className="text-center text-primary hover:underline"
-              textValue="ver-todo"
-              onPress={onOpenNotifications}
-            >
-              Ver todo
-            </DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
+              <DropdownItem
+                key="ver-todo"
+                className="text-center text-primary hover:underline"
+                textValue="ver-todo"
+                onPress={onOpenNotifications}
+              >
+                Ver todo
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+        )}
 
         <div>{children}</div>
 
