@@ -8,11 +8,14 @@ import { usePermisos } from "@/hooks/permisos/usePermisos";
 import { Modulo } from "@/types/Modulo";
 import { Ruta } from "@/types/Ruta";
 import { Permisos } from "@/types/permisos";
+import { MailConfig } from "@/components/organismos/MailConfig/MailConfig";
+import usePermissions from "@/hooks/Usuarios/usePermissions";
 
 export const AccesoPage = () => {
   const { modulos, changeState: stateMod } = useModulo();
   const { rutas, changeState: stateRut } = useRuta();
   const { permiso } = usePermisos();
+  const { userHasPermission } = usePermissions();
 
   const moduloColumns: TableColumn<Modulo>[] = [
     { key: "nombre", label: "Nombre" },
@@ -87,6 +90,13 @@ export const AccesoPage = () => {
             />
           </div>
         </Tab>
+        {userHasPermission(1) && (
+          <Tab key="mailconfig" title="Configuración Correo">
+            <div className="mt-4">
+              <MailConfig />
+            </div>
+          </Tab>
+        )}
       </Tabs>
     </div>
   );

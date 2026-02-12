@@ -22,6 +22,11 @@ export const UserUpdateSchema = z.object({
   fkRol: z
     .number({ message: "Rol es requerido y debe ser un numero" })
     .optional(),
+
+  // Campos de configuracion de correo (opcionales)
+  serviceMail: z.string().optional(),
+  mailUser: z.string().email().optional(),
+  mailPassword: z.string().optional(),
 });
 
 export type UserUpdate = z.infer<typeof UserUpdateSchema>;
@@ -58,6 +63,11 @@ export const UserSchema = z.object({
     .string({ message: "Contraseña es obligatoria" })
     .min(8, { message: "Contraseña es requerida" }),
   fkRol: z.number({ message: "Rol es requerido y debe ser un numero" }),
+
+  // Campos de configuracion de correo (opcionales)
+  serviceMail: z.string().optional(),
+  mailUser: z.string().email().optional(),
+  mailPassword: z.string().optional(),
 });
 
 export type User = z.infer<typeof UserSchema>;

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Card, CardBody } from "@heroui/react";
 import { useNavigate } from "react-router-dom";
+import Cookies from "universal-cookie";
 
 import Globaltable from "@/components/organismos/table.tsx";
 import { TableColumn } from "@/components/organismos/table.tsx";
@@ -13,6 +14,7 @@ import { postElementos } from "@/types/Elemento";
 import usePermissions from "@/hooks/Usuarios/usePermissions";
 import FormularioElementos from "@/components/organismos/Elementos/FormRegister";
 import { formatDateColombia } from "@/utils/dateUtils";
+import { axiosAPI } from "@/axios/axiosAPI";
 
 export const ElementosTable = () => {
   const { userHasPermission } = usePermissions();
@@ -40,6 +42,42 @@ export const ElementosTable = () => {
   };
   const handleGoToCaracteristica = () => {
     navigate("/bodega/caracteristicas");
+  };
+
+  // Funcion para exportar elementos a Excel
+  const handleExportToExcel = async () => {
+    try {
+      const cookies = new Cookies();
+      const token = cookies.get("token");
+      
+      const response = await fetch(
+        `/elementos/export/excel`,
+        {
+          method: "GET",
+          credentials: 'include', // Importante: enviar cookies
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `elementos_${new Date().toISOString().split("T")[0]}.xlsx`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      } else {
+        console.error("Error al exportar:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error al exportar elementos:", error);
+    }
   };
 
   const handleCloseUpdate = () => {
@@ -198,9 +236,16 @@ export const ElementosTable = () => {
           columns={columns}
           data={ElementosWithKey}
           extraHeaderContent={
-            <div>
+            <div className="flex gap-2">
               {userHasPermission(18) && (
                 <Buton text="Nuevo elemento" onPress={() => setIsOpen(true)} />
+              )}
+              {userHasPermission(19) && (
+                <Buton
+                  text="Exportar Excel"
+                  onPress={handleExportToExcel}
+                  className="bg-green-600 text-white hover:bg-green-700"
+                />
               )}
             </div>
           }

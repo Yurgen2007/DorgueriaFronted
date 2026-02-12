@@ -1,5 +1,5 @@
 import { Input } from "@heroui/input";
-import { addToast, Select, SelectItem } from "@heroui/react";
+import { addToast, Select, SelectItem, Divider } from "@heroui/react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@heroui/form";
@@ -31,6 +31,7 @@ export default function FormularioU({ addData, onClose, id }: FormularioProps) {
     control,
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<User>({
     resolver: zodResolver(UserSchema),
@@ -43,8 +44,16 @@ export default function FormularioU({ addData, onClose, id }: FormularioProps) {
   const [showModalRol, setShowModalRol] = useState(false);
   const handleClose = () => setShowModalRol(false);
 
+  // Observar el valor del rol seleccionado
+  const selectedRol = watch("fkRol");
+
+  // ID del rol de administrador (ajustar segun tu base de datos)
+  const ADMIN_ROL_ID = 1;
+
+  const isAdmin = selectedRol === ADMIN_ROL_ID;
+
   const onSubmit = async (data: User) => {
-    console.log(data);
+    console.log("Datos del formulario:", data);
     try {
       await addData(data);
       onClose();
@@ -100,8 +109,8 @@ export default function FormularioU({ addData, onClose, id }: FormularioProps) {
           isInvalid={!!errors.edad}
         />
         <Input
-          label="Teléfono"
-          placeholder="Teléfono"
+          label="Telefono"
+          placeholder="Telefono"
           type="text"
           {...register("telefono")}
           errorMessage={errors.telefono?.message}
@@ -149,7 +158,7 @@ export default function FormularioU({ addData, onClose, id }: FormularioProps) {
           isInvalid={!!errors.cargo}
         />
         <Input
-          label="Contraseña"
+          label="Contrasena"
           placeholder="Password"
           type="password"
           {...register("password")}
@@ -194,6 +203,48 @@ export default function FormularioU({ addData, onClose, id }: FormularioProps) {
               </div>
             )}
           />
+        )}
+
+        {/* Seccion de configuracion de correo para administradores */}
+        {isAdmin && (
+          <>
+            <Divider className="my-4" />
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-primary">
+                Configuracion de Correo
+              </h3>
+              <p className="text-sm text-gray-500">
+                Configure las credenciales para el envio de notificaciones por
+                correo electronico
+              </p>
+
+              <Input
+                label="Servicio de correo"
+                placeholder="Ej: gmail, hotmail, outlook"
+                {...register("serviceMail")}
+                errorMessage={errors.serviceMail?.message}
+                isInvalid={!!errors.serviceMail}
+              />
+
+              <Input
+                label="Correo electronico"
+                type="email"
+                placeholder="correo@ejemplo.com"
+                {...register("mailUser")}
+                errorMessage={errors.mailUser?.message}
+                isInvalid={!!errors.mailUser}
+              />
+
+              <Input
+                label="Contrasena / Clave de aplicacion"
+                type="password"
+                placeholder="Ingrese la contrasena o clave de aplicacion"
+                {...register("mailPassword")}
+                errorMessage={errors.mailPassword?.message}
+                isInvalid={!!errors.mailPassword}
+              />
+            </div>
+          </>
         )}
       </Form>
       <Modal

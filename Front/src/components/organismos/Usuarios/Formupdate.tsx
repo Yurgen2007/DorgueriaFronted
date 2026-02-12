@@ -2,7 +2,7 @@ import { Input } from "@heroui/input";
 import { useForm } from "react-hook-form";
 import { Form } from "@heroui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { addToast, Select, SelectItem } from "@heroui/react";
+import { addToast, Select, SelectItem, Divider } from "@heroui/react";
 import { useState } from "react";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
 
@@ -53,12 +53,21 @@ export const FormUpdate = ({ Users, userId, id, onclose }: FormuProps) => {
       correo: foundUser.correo,
       cargo: foundUser.cargo,
       fkRol: foundUser.fkRol,
+      serviceMail: foundUser.serviceMail || "",
+      mailUser: foundUser.mailUser || "",
+      mailPassword: "",
     },
   });
 
-  console.log(foundUser.fkRol);
+  // ID del rol de administrador (ajustar segun tu base de datos)
+  const ADMIN_ROL_ID = 1;
+  const selectedRol = watch("fkRol");
+  const isAdmin = selectedRol === ADMIN_ROL_ID || foundUser.fkRol === ADMIN_ROL_ID;
+
+  console.log("Rol del usuario:", foundUser.fkRol, "Es admin:", isAdmin);
+
   const onSubmit = async (data: UserUpdate) => {
-    console.log(data);
+    console.log("Datos actualizados:", data);
     if (!data.idUsuario) return;
     try {
       await updateUser(data.idUsuario, data);
@@ -156,6 +165,49 @@ export const FormUpdate = ({ Users, userId, id, onclose }: FormuProps) => {
             </Buton>
           </div>
         )}
+
+        {/* Seccion de configuracion de correo para administradores */}
+        {isAdmin && (
+          <>
+            <Divider className="my-4" />
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-primary">
+                Configuracion de Correo
+              </h3>
+              <p className="text-sm text-gray-500">
+                Configure las credenciales para el envio de notificaciones por
+                correo electronico
+              </p>
+
+              <Input
+                label="Servicio de correo"
+                placeholder="Ej: gmail, hotmail, outlook"
+                {...register("serviceMail")}
+                errorMessage={errors.serviceMail?.message}
+                isInvalid={!!errors.serviceMail}
+              />
+
+              <Input
+                label="Correo electronico"
+                type="email"
+                placeholder="correo@ejemplo.com"
+                {...register("mailUser")}
+                errorMessage={errors.mailUser?.message}
+                isInvalid={!!errors.mailUser}
+              />
+
+              <Input
+                label="Nueva contrasena / Clave de aplicacion"
+                type="password"
+                placeholder="Ingrese la contrasena o clave de aplicacion (solo si desea cambiarla)"
+                {...register("mailPassword")}
+                errorMessage={errors.mailPassword?.message}
+                isInvalid={!!errors.mailPassword}
+              />
+            </div>
+          </>
+        )}
+
         <Buton className="w-full rounded-xl" text="Guardar" type="submit" />
       </Form>
       <Modal

@@ -6,6 +6,13 @@ export default defineConfig({
   server: {
     host: true,
     allowedHosts: ['frontend'],
+    proxy: {
+      '/elementos': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+        secure: false,
+      },
+    },
   },
   plugins: [react(), tsconfigPaths()],
   build: {
