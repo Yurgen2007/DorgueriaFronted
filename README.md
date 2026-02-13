@@ -3,11 +3,17 @@
 Abre la carpeta donde desea clonar el proyecto y ejecuta este comando en un cmd
 
 ```bash
-$ git clone https://github.com/estefany-123/formatrackFront.git
+$ git clone https://github.com/Yurgen2007/DorgueriaFronted.git
 ```
-luego de clonarlo le aparecera una carpeta "formatrackFront" y dentro de ella encontrara la carpeta raiz "Front" abralas con un click o en la terminal con cd + tabulador
+luego de clonarlo le aparecera una carpeta "Frontend" y dentro de ella encontrara la carpeta raiz "Front" abralas con un click o en la terminal con cd + tabulador
 
-Cree las variables de entorno en la carpeta raiztomando de guia el .env.example para crear su propio .env
+Cree las variables de entorno en la carpeta raiztomando de guia el .env.example para crear su propio .env puede utilizar estas
+```bash
+$  VITE_API_CLIENT = 'http://localhost:3000/'
+
+$  VITE_SOCKET_BASE_URL =  "http://localhost:3000"
+```
+
 
 ## Instalación de dependencias
 Luego de esto pasamos a ejecutar este comando dentro de la carpeta raiz para que se descarguen todas las dependencias necesarias 

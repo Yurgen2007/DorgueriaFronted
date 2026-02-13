@@ -12,7 +12,7 @@ import { Unidad } from "@/types/Unidad";
 import FormularioUnidades from "@/components/organismos/UnidadesMedida/FormRegister";
 
 export const UnidadTable = () => {
-  const { unidades, isLoading, isError, error, addUnidad, changeState } =
+  const { unidades, isLoading, isError, error, addUnidad, deleteReal } =
     useUnidad();
 
   //Modal agregar
@@ -34,8 +34,8 @@ export const UnidadTable = () => {
     setSelectedUnidad(null);
   };
 
-  const handleState = async (idUnidad: number) => {
-    await changeState(idUnidad);
+  const handleDelete = async (idUnidad: number) => {
+    await deleteReal(idUnidad);
   };
 
   const handleAddUnidad = async (unidad: Unidad) => {
@@ -170,7 +170,7 @@ export const UnidadTable = () => {
           extraHeaderContent={
             <Buton text="Nueva unidad" onPress={() => setIsOpen(true)} />
           }
-          onDelete={(unidad) => handleState(unidad.idUnidad)}
+          onDelete={(unidad) => handleDelete(unidad.idUnidad)}
           onEdit={handleEdit}
         />
       )}

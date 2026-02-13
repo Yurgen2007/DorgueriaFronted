@@ -2,6 +2,7 @@ import { addToast } from "@heroui/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { deleteUnidad } from "@/axios/UnidadesMedida/deleteUnidad";
+import { deleteUnidadReal } from "@/axios/UnidadesMedida/deleteUnidadReal";
 import { getUnidad } from "@/axios/UnidadesMedida/getUnidad";
 import { postUnidad } from "@/axios/UnidadesMedida/postUnidad";
 import { putUnidad } from "@/axios/UnidadesMedida/putUnidad";
@@ -72,6 +73,25 @@ export function useUnidad() {
     },
   });
 
+  const deleteRealMutation = useMutation({
+    mutationFn: deleteUnidadReal,
+    onSuccess: () => {
+      addToast({
+        title: "Unidad eliminada correctamente",
+        color: "primary",
+        timeout: 3000,
+        shouldShowTimeoutProgress: true,
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["unidades"],
+      });
+    },
+
+    onError: (error) => {
+      console.error("Error al eliminar:", error);
+    },
+  });
+
   const addUnidad = async (unidad: Unidad) => {
     return addUnidadMutation.mutateAsync(unidad);
   };
@@ -84,6 +104,10 @@ export function useUnidad() {
     return changeStateMutation.mutateAsync(idUnidad);
   };
 
+  const deleteReal = async (idUnidad: number) => {
+    return deleteRealMutation.mutateAsync(idUnidad);
+  };
+
   return {
     unidades: data,
     isLoading,
@@ -93,5 +117,6 @@ export function useUnidad() {
     changeState,
     getUnidadById,
     updateUnidad,
+    deleteReal,
   };
 }
